@@ -14,6 +14,7 @@ const loginpressed=()=>{
   }
   const signup=() => {
       navigation.push("Signup")
+
   }
   
   return(

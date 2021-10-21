@@ -28,4 +28,5 @@ exports.getTest = (req,res) => {
         if (error) throw error;
         res.send(results)});
     });
+    
 }

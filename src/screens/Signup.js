@@ -2,14 +2,20 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import logo from '../assets/opticx.png'
+import { useState } from 'react/cjs/react.development';
 
 
 const Signup = ({navigation})=>{
+  const [email,setEmail]  = useState('')
+  const [password,setPassword] = useState('')
   const signupPressed=()=>{
     navigation.push("Home")
   }
   
   return(
+
+    
+
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
      <Text style={styles.logo}>Opticx</Text>
@@ -18,7 +24,7 @@ const Signup = ({navigation})=>{
          style={styles.inputText}
          placeholder="Email..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => this.setState({email:text})}/>
+         onChangeText={text => setEmail({email:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
@@ -26,7 +32,7 @@ const Signup = ({navigation})=>{
          style={styles.inputText}
          placeholder="Password..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => this.setState({password:text})}/>
+         onChangeText={text => setPassword({password:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
@@ -34,9 +40,9 @@ const Signup = ({navigation})=>{
          style={styles.inputText}
          placeholder="Confirm password..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => this.setState({password:text})}/>
+         onChangeText={text => setPassword({password:text})}/>
      </View>
-     <TouchableOpacity style={styles.registerBtn} onPress={this.signupPressed}>
+     <TouchableOpacity style={styles.registerBtn} onPress={signupPressed}>
           <Text style={styles.registerText}>Register</Text>
         </TouchableOpacity>
    </View>
