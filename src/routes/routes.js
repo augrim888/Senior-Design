@@ -49,6 +49,65 @@ app.post('/login', function (req, res) {
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
     res.send(returnstatus)
   });
+
+
+});
+});
+
+app.post('/register', function (req, res){
+  connection.getConnection(function (err, connection) {
+  let user = req.body.user;
+  let password = req.body.password;
+  let name = req.body.name;
+  let address = req.body.address;
+  let state = req.body.state;
+  let city = req.body.city;
+  let zip = req.body.zip;
+  let email = req.body.email;
+  let phone = req.body.phone;
+  let usertype = req.body.usertype;
+  let clinicname = req.body.clinicname;
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query('SELECT * FROM user_info WHERE user = "' + req.body.user + '"', function (error, results, fields) {
+    //console.log('SELECT * FROM user_info WHERE user = "' + req.body.user + '"')
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+    
+    if(results.length != 0)
+    {
+      returnstatus = "Error: user already exists"
+      res.send(returnstatus)
+    }
+    else
+    {  
+      connection.query('SELECT * FROM user_info WHERE email = "' + req.body.email + '"', function (error, results, fields) {
+    
+      if (error) throw error;
+
+      if(results.length != 0)
+      {
+        returnstatus = "Error: email already registered"
+        res.send(returnstatus)
+      }
+      else
+      {
+      // Getting the 'response' from the database and sending it to our route. This is were the data is.
+        returnstatus = "User successfully registered"
+        connection.query('INSERT INTO user_info VALUES (\''  + user + '\',\'' + password + '\',\'' + name + '\',\'' + address + '\',\'' + phone + '\',\'' + email + '\',\'' + city + '\',\'' + state + '\',\'' + zip + '\',\'' + usertype + '\',\''+ '\',\'' + clinicname + '\')',function (error, results, fields) {
+        //console.log('SELECT * FROM user_info WHERE user = "' + req.body.user + '"')
+        // If some error occurs, we throw an error.
+        //console.log(String.format('INSERT INTO user_info VALUES (%s,%s,%s,%s)',req.body.user,req.body.password,req.body.name,req.body.address))
+        if (error) throw error;
+        res.send(returnstatus)
+        // Getting the 'response' from the database and sending it to our route. This is were the data is.
+        });
+      }
+      
+  });
+  
+}
+});
 });
 });
 
