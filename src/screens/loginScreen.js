@@ -7,14 +7,66 @@ import {useState} from 'react'
 
 
  Login = ({navigation}) => {
-     const [email,setEmail]  = useState('')
-     const [password,setPassword] = useState('')
+     const [userName,setUserName]  = useState('')
+     const [userPassword,setUserPassword] = useState('')
+
 const loginpressed=()=>{
-    navigation.push("Home")
+  setErrortext('');
+  if (!userName) {
+    alert('Please fill User Name');
+    return;
   }
+  if (!userPassword) {
+    alert('Please fill Password');
+    return;
+  }
+  setLoading(true);
+  let dataToSend = {user: userName, password: userPassword};
+  let formBody = [];
+  for (let key in dataToSend) {
+    let encodedKey = key;
+    let encodedValue = (dataToSend[key]);
+    formBody.push(encodedKey + '=' + encodedValue);
+  }
+  formBody = formBody.join('&');
+
+  fetch('http://localhost:3307/login', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    firstParam: userName,
+    secondParam: password
+  })
+})
+    .then((response) => response.json())
+    .then((responseJson) => {
+      //Hide Loader
+      setLoading(false);
+      console.log(responseJson);
+      // If server response message same as Data Matched
+      if (responseJson.status === 'success') {
+        AsyncStorage.setItem('user_id', responseJson.data.user);
+        console.log(responseJson.data.user);
+        navigation.replace('DrawerNavigationRoutes');
+      } else {
+        setErrortext(responseJson.msg);
+        console.log('Please check your user name id or password');
+      }
+    })
+    .catch((error) => {
+      //Hide Loader
+      setLoading(false);
+      console.error(error);
+    });
+  };
+
   const signup=() => {
       navigation.push("Signup")
-  }
+
+  };
   
   return(
     <View style={styles.container}>
@@ -23,9 +75,9 @@ const loginpressed=()=>{
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
-         placeholder="Email..."
+         placeholder="User Name..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => {setEmail({email:text})}}/>
+         onChangeText={text => {setUserName({userName:text})}}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
