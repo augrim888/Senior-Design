@@ -4,11 +4,9 @@ import StackNav from './src/routes/StackNav';
 import 'react-native-gesture-handler';
 // Import Navigators from React Navigation
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/pickScreen';
-import Login from '../screens/loginScreen';
-import Signup from '../screens/Signup'
-import React from 'react';
-
+import Home from './src/screens/pickScreen';
+import Login from './src/screens/loginScreen';
+import Signup from './src/screens/Signup';
 const Stack = createStackNavigator();
 
 const Auth = () => {
@@ -54,12 +52,12 @@ const App = () => {
           options={{headerShown: false}}
         />
         {/* Navigation Drawer as a landing page */}
-        <Stack.Screen
+       {/*<Stack.Screen
           name="DrawerNavigationRoutes"
           component={DrawerNavigationRoutes}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
-        />
+       />*/}
       </Stack.Navigator>
     </NavigationContainer>
   );

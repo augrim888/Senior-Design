@@ -6,9 +6,11 @@ import logo from '../assets/opticx.png'
 import {useState} from 'react'
 
 
- Login = ({navigation}) => {
-     const [userName,setUserName]  = useState('')
-     const [userPassword,setUserPassword] = useState('')
+ const Login = ({navigation}) => {
+     const [userName,setUserName]  = useState('');
+     const [userPassword,setUserPassword] = useState('');
+     const [loading, setLoading] = useState(false);
+     const [errortext, setErrortext] = useState('');
 
 const loginpressed=()=>{
   setErrortext('');
@@ -22,13 +24,14 @@ const loginpressed=()=>{
   }
   setLoading(true);
   let dataToSend = {user: userName, password: userPassword};
-  let formBody = [];
+  /*let formBody = [];
   for (let key in dataToSend) {
     let encodedKey = key;
     let encodedValue = (dataToSend[key]);
     formBody.push(encodedKey + '=' + encodedValue);
+    console.log(encodedKey);
   }
-  formBody = formBody.join('&');
+  formBody = formBody.join('&');*/
 
   fetch('http://localhost:3307/login', {
   method: 'POST',
@@ -37,14 +40,15 @@ const loginpressed=()=>{
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    firstParam: userName,
-    secondParam: password
+    user: userName,
+    password: userPassword
   })
+  
 })
     .then((response) => response.json())
     .then((responseJson) => {
       //Hide Loader
-      setLoading(false);
+      setLoading(False);
       console.log(responseJson);
       // If server response message same as Data Matched
       if (responseJson.status === 'success') {
@@ -58,9 +62,10 @@ const loginpressed=()=>{
     })
     .catch((error) => {
       //Hide Loader
-      setLoading(false);
+      console.log(userName)
       console.error(error);
     });
+    console.log(userName)
   };
 
   const signup=() => {
@@ -85,7 +90,7 @@ const loginpressed=()=>{
          style={styles.inputText}
          placeholder="Password..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword({password:text})}/>
+         onChangeText={text => setUserPassword({password:text})}/>
      </View>
      <TouchableOpacity>
           <Text style={styles.forgot}>Forgot Password?</Text>

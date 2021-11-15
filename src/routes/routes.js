@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const cors = require('cors');
 
 const connection = mysql.createPool({
   host     : 'localhost',
@@ -10,6 +11,7 @@ const connection = mysql.createPool({
 });
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 // Creating a GET route that returns data from the 'users' table.
@@ -30,6 +32,7 @@ app.get('/user_info', function (req, res) {
 
 app.post('/login', function (req, res) {
   // Connecting to the database.
+  console.log(req.body.user);
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
@@ -48,6 +51,7 @@ app.post('/login', function (req, res) {
     }
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
     res.send(returnstatus)
+
   });
 
 
@@ -91,5 +95,5 @@ app.post('/register', function (req, res){
 });
 // Starting our server.
 app.listen(3307, () => {
- console.log('Go to http://localhost:3307/user_info so you can see the data.');
+ console.log('Go to https://localhost:3307/user_info so you can see the data.');
 });
