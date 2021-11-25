@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useState, createRef} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import logo from '../assets/opticx.png'
-import {useState} from 'react'
 
 
  const Login = ({navigation}) => {
@@ -21,6 +20,7 @@ const loginpressed=()=>{
   if (!userPassword) {
     alert('Please fill Password');
     return;
+<<<<<<< HEAD
   }
   setLoading(true);
   let dataToSend = {user: userName, password: userPassword};
@@ -32,6 +32,18 @@ const loginpressed=()=>{
     console.log(encodedKey);
   }
   formBody = formBody.join('&');*/
+=======
+  }
+  setLoading(true);
+  let dataToSend = {user: userName, password: userPassword};
+  let formBody = [];
+  for (let key in dataToSend) {
+    let encodedKey = key;
+    let encodedValue = (dataToSend[key]);
+    formBody.push(encodedKey + '=' + encodedValue);
+  }
+  formBody = formBody.join('&');
+>>>>>>> 7600578510b55fae397dba017ddee142f09cdd43
 
   fetch('http://localhost:3307/login', {
   method: 'POST',
@@ -40,15 +52,25 @@ const loginpressed=()=>{
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
+<<<<<<< HEAD
     user: userName,
     password: userPassword
   })
   
+=======
+    firstParam: userName,
+    secondParam: userPassword
+  })
+>>>>>>> 7600578510b55fae397dba017ddee142f09cdd43
 })
     .then((response) => response.json())
     .then((responseJson) => {
       //Hide Loader
+<<<<<<< HEAD
       setLoading(False);
+=======
+      setLoading(false);
+>>>>>>> 7600578510b55fae397dba017ddee142f09cdd43
       console.log(responseJson);
       // If server response message same as Data Matched
       if (responseJson.status === 'success') {
@@ -62,10 +84,16 @@ const loginpressed=()=>{
     })
     .catch((error) => {
       //Hide Loader
+<<<<<<< HEAD
       console.log(userName)
       console.error(error);
     });
     console.log(userName)
+=======
+      setLoading(false);
+      console.error(error);
+    });
+>>>>>>> 7600578510b55fae397dba017ddee142f09cdd43
   };
 
   const signup=() => {

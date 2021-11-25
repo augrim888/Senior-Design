@@ -7,11 +7,11 @@ exports.getTest = (req,res) => {
 
     const connection = mysql.createPool({
         host     : 'localhost',
-        user     : 'root',
+        user     : 'spencer',
         port: 3306,
-        password : 'Europ@123!',
+        password : 'password123',
         database : 'opticx',
-        connectionLimit : 1,
+        connectionLimit : 0,
         queueLimit : 0,
         multipleStatements : true
 
@@ -28,4 +28,6 @@ exports.getTest = (req,res) => {
         if (error) throw error;
         res.send(results)});
     });
+
+    
 }

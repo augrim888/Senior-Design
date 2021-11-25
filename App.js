@@ -21,8 +21,8 @@ const Auth = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{headerShown: true}}
-      />
+
+        options={{headerShown: false}}      />
       <Stack.Screen
         name="Signup"
         component={Signup}
