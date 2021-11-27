@@ -38,8 +38,8 @@ const loginpressed=()=>{
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    user: userName,
-    password: userPassword
+    userName: userName,
+    userPassword: userPassword
   })
 
 })
@@ -50,10 +50,10 @@ const loginpressed=()=>{
       setLoading(false);
       console.log(responseJson);
       // If server response message same as Data Matched
-      if (responseJson.status === 'success') {
+      if (responseJson.status === 'LOGIN SUCCESS') {
         AsyncStorage.setItem('user_id', responseJson.data.user);
         console.log(responseJson.data.user);
-        navigation.replace('DrawerNavigationRoutes');
+        navigation.push('Home');
       } else {
         setErrortext(responseJson.msg);
         console.log('Please check your user name id or password');

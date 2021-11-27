@@ -1,16 +1,29 @@
 import React from 'react';
 import { StyleSheet, ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import logo from '../assets/opticx.png'
 import { useState } from 'react';
 
 
-const Signup = ({navigation})=>{
-  const [email,setEmail]  = useState('')
-  const [password,setPassword] = useState('')
+const createOrder = ({navigation})=>{
+    const [itemName,setItemName]  = useState('');
+    const [description,setDescription] = useState('');
+    const [imageURL,setImageURL] = useState('');
+    const [price,setPrice] = useState('');
+    const [user,setUser] = useState('');
+
   const signupPressed=()=>{
-    navigation.push('Home')
-  }
+    fetch('http://localhost:3307/additem', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+
+        })
+      
+      })
+    };
 
   return(
 
@@ -18,64 +31,49 @@ const Signup = ({navigation})=>{
 
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
-     <Text style={styles.logo}>Opticx</Text>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
-         placeholder="Email..."
+         placeholder="Model Name"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setEmail({email:text})}/>
+         onChangeText={text => setItemName({itemName:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
-         secureTextEntry
          style={styles.inputText}
-         placeholder="Password..."
+         placeholder="Description."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword({password:text})}/>
+         onChangeText={text => setDescription({description:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
-         secureTextEntry
          style={styles.inputText}
-         placeholder="Confirm password..."
+         placeholder="Image"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword({password:text})}/>
+         onChangeText={text => setImageURL({imageURL:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
-         secureTextEntry
          style={styles.inputText}
-         placeholder="Confirm password..."
+         placeholder="Price"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword({password:text})}/>
+         onChangeText={text => setPrice({price:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
-         secureTextEntry
          style={styles.inputText}
-         placeholder="Confirm password..."
+         placeholder="Authorized user Name"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword({password:text})}/>
-     </View>
-     <View style={styles.inputView} >
-       <TextInput
-         secureTextEntry
-         style={styles.inputText}
-         placeholder="Confirm password..."
-         placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword({password:text})}/>
+         onChangeText={text => setUser({user:text})}/>
      </View>
      <TouchableOpacity style={styles.registerBtn} onPress={signupPressed}>
-          <Text style={styles.registerText}>Register</Text>
+          <Text style={styles.registerText}>Add Item</Text>
         </TouchableOpacity>
-   </View>
-   </ScrollView>
-
-
+    </View>
+</ScrollView>
       );
   }
-  export default Signup
+  export default createOrder
 
 const styles = StyleSheet.create({
   container: {
@@ -114,20 +112,6 @@ const styles = StyleSheet.create({
   height: 150, 
   resizeMode:'contain',
   position:'relative'
-  },
-  forgot:{
-    color:"#000000",
-    fontSize:11
-  },
-  loginBtn:{
-    width:"80%",
-    backgroundColor:"#fb5b5a",
-    borderRadius:25,
-    height:50,
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:40,
-    marginBottom:10
   },
   registerText:{
     color:"#000000"

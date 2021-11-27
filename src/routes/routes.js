@@ -34,6 +34,8 @@ app.post('/login', function (req, res) {
   // Connecting to the database.
 
   console.log(req.body.userName.userName);
+  console.log('here');
+
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
@@ -42,7 +44,7 @@ app.post('/login', function (req, res) {
     // If some error occurs, we throw an error.
   
     if (error) throw error;
-    //console.log(results[0])
+    console.log(results[0])
     if(req.body.userPassword.password == results[0].password)
     {
       returnstatus = "LOGIN SUCCESS"

@@ -7,6 +7,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/screens/pickScreen';
 import Login from './src/screens/loginScreen';
 import Signup from './src/screens/Signup';
+import checkOrder from './src/screens/checkOrder';
+import createOrder from './src/screens/createOrder';
+
 const Stack = createStackNavigator();
 
 const Auth = () => {
@@ -22,7 +25,7 @@ const Auth = () => {
         name="Home"
         component={Home}
 
-        options={{headerShown: false}}      />
+        options={{headerShown: false}}/>
       <Stack.Screen
         name="Signup"
         component={Signup}
@@ -35,8 +38,33 @@ const Auth = () => {
           headerTitleStyle: {
             fontWeight: 'bold', //Set Header text style
           },
-        }}
-      />
+        }}/>
+        <Stack.Screen
+        name="createOrder"
+        component={createOrder}
+        options={{
+          title: 'createOrder', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}/>
+        {/*<Stack.Screen
+        name="checkOrder"
+        component={checkOrder}
+        options={{
+          title: 'checkOrder', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}/>*/}
     </Stack.Navigator>
   );
 };

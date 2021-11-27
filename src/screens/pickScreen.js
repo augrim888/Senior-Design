@@ -1,28 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
-import logo from '../assets/opticx.png'
-
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import clipboard from '../assets/clipboard.png'
+import order from '../assets/package.png'
 
 const Home=({navigation})=>{
 
 
-  const click=() => {
-    Alert.alert("Were working on this, please come back later")
-
+  const clickCreate=() => {
+    navigation.push('createOrder')
+}
+  const clickCheck=() => {
+  navigation.push('createOrder')
 }
   return(
     <View style={Styles.container}>
-                <View style = {Styles.choice}>
-            <TouchableOpacity style={Styles.logostyle} onPress={click}>
-            <Image source = {require('../assets/lens.png')} style = {Styles.lensStyle} position ={'relative'}/>
-            <Text style={Styles.lens}>contact lens</Text>
+            <TouchableOpacity style={Styles.buttonStyle} onPress={clickCreate}>
+              <TouchableHighlight style= {Styles.buttonClick} />
+            <Image source = {order} style = {Styles.buttonImageStyle} position ={'relative'}/>
+            <View style={Styles.buttonSeperatorStyle} />
+            <Text style={Styles.buttonTextStyle}>create orders</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={Styles.logostyle} onPress={click}>
-            <Image source = {require('../assets/opticx.png')} style = {Styles.logostyle} />
-                <Text style={Styles.glasses}>glasses</Text>
+            <TouchableOpacity style={Styles.buttonStyle} onPress={clickCheck}>
+            <TouchableHighlight style= {Styles.buttonClick} />
+            <Image source = {clipboard} style = {Styles.buttonImageStyle} />
+            <View style={Styles.buttonSeperatorStyle} />
+                <Text style={Styles.buttonTextStyle}>View Orders</Text>
             </TouchableOpacity>
           </View>
-   </View>
       );
   }
 export default Home
@@ -54,41 +59,35 @@ lens:{
     color:"#000000",
     fontSize:11
   },
-  logostyle:{
-    padding:10,
-    width: 150, 
-    height: 150, 
-    bottom:20,
-    borderRadius: 20,
-    resizeMode:'contain',
-    position:'relative',
-    shadowColor: '#303838',
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 10,
-    shadowOpacity: 0.35,
-    },
-    lensStyle:{
-      position:'absolute',
-      bottom:120,
-      padding:10,
-      width: 150, 
-      height: 150, 
-      borderRadius: 20,
-      marginTop:20,
-      resizeMode:'contain',
-      shadowColor: '#303838',
-      shadowOffset: { width: 0, height: 5 },
-      shadowRadius: 10,
-      shadowOpacity: 0.60,
-      },
-    imageBtn: {
-      backgroundColor: '#859a9b',
-      borderRadius: 20,
-      padding: 10,
-      marginBottom: 20,
-      shadowColor: '#303838',
-      shadowOffset: { width: 0, height: 5 },
-      shadowRadius: 10,
-      shadowOpacity: 0.35,
-    }
+  buttonStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#485a96',
+    borderWidth: 2,
+    borderColor: '#a5b0a6',
+    height: 90,
+    width:250,
+    borderRadius: 5,
+    margin: 5,
+  },
+  buttonClick: {
+    backgroundColor: '#07a809',
+  },
+  buttonImageStyle: {
+    padding: 10,
+    margin: 5,
+    height: 80,
+    width: 80,
+    resizeMode:'contain'
+  },
+  buttonTextStyle: {
+    color: '#fff',
+    marginBottom: 4,
+    marginLeft: 10,
+  },
+  buttonSeperatorStyle: {
+    backgroundColor: '#a5b0a6',
+    width: 1,
+    height: 60,
+  }
 });
