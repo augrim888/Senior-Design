@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } fro
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import logo from '../assets/opticx.png'
-import AsyncStorage from '@react-native-community/async-storage';
+//import AsyncStorage from '@react-native-community/async-storage';
 
 
  const Login = ({navigation}) => {
@@ -55,7 +55,6 @@ const loginpressed=()=>{
         if(responseJson.role=='vendor')
         {
           navigation.push('vendorHome');
-          AsyncStorage(role,userName);
 
         }
         else
@@ -118,7 +117,7 @@ const loginpressed=()=>{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#bdd1db',
+    backgroundColor: '#1e2b30',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -144,12 +143,12 @@ const styles = StyleSheet.create({
   },
   logostyle:{
   width: 150, 
-  height: 150, 
+  height: 100, 
   resizeMode:'contain',
   position:'relative'
   },
   forgot:{
-    color:"#000000",
+    color:"#ffffff",
     fontSize:11
   },
   loginBtn:{

@@ -80,7 +80,7 @@ const Signup = ({navigation})=>{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#bdd1db',
+    backgroundColor: '#171717',
     alignItems: 'center',
     justifyContent: 'center',
   },
