@@ -51,8 +51,7 @@ const loginpressed=()=>{
       console.log(responseJson);
       // If server response message same as Data Matched
       if (responseJson.status === 'LOGIN SUCCESS') {
-        AsyncStorage.setItem('user_id', responseJson.data.user);
-        console.log(responseJson.data.user);
+
         navigation.push('Home');
       } else {
         setErrortext(responseJson.msg);

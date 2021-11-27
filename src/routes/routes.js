@@ -5,9 +5,9 @@ const cors = require('cors');
 
 const connection = mysql.createPool({
   host     : 'localhost',
-  user     : 'root',
+  user     : 'test',
   password : 'Europ@123!',
-  database : 'seniordesign',
+  database : 'opticx',
 });
 
 const app = express();
@@ -34,9 +34,15 @@ app.post('/login', function (req, res) {
   // Connecting to the database.
 
   console.log(req.body.userName.userName);
-  console.log('here');
+  console.log(req.body.userPassword.password);
 
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
+
+
 
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"', function (error, results, fields) {
