@@ -42,8 +42,6 @@ app.post('/login', function (req, res) {
       return
     }
 
-
-
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
@@ -51,7 +49,11 @@ app.post('/login', function (req, res) {
   
     if (error) throw error;
     console.log(results[0])
-    if(req.body.userPassword.password == results[0].password)
+    if(results.length==0)
+    {
+      returnstatus = "LOGIN FAILED"
+    }
+    else if(req.body.userPassword.password == results[0].password)
     {
       returnstatus = "LOGIN SUCCESS"
     }
@@ -71,6 +73,10 @@ app.post('/login', function (req, res) {
 
 app.post('/register', function (req, res){
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
   let user = req.body.userName;
   let password = req.body.password;
   let name = req.body.name;
@@ -109,6 +115,10 @@ app.get('/userhome', function (req, res) {
   // Connecting to the database.
   
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
 
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query('SELECT itemID,itemname,description,imageurl,price FROM items', function (error, results, fields) {
@@ -132,6 +142,10 @@ app.get('/viewitems', function (req, res) {
   // Connecting to the database.
   
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
   connection.query('SELECT clinicname FROM user_info WHERE user = \"' + req.body.userName + "\"", function (error,userresult, fields){
   // Executing the MySQL query (select all data from the 'users' table).
   if (error) throw error;
@@ -154,6 +168,10 @@ app.get('/viewitems', function (req, res) {
 
 app.post('/viewitems', function (req, res){
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
   let method = req.body.method
   let itemid = req.body.itemid
 
@@ -183,6 +201,10 @@ app.post('/viewitems', function (req, res){
 
 app.post('/additem', function (req, res){
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
   let itemname = req.body.itemname
   let description = req.body.description
   let imageurl = req.body.imageurl
@@ -198,6 +220,10 @@ app.post('/additem', function (req, res){
 
 app.get('/vieworders', function (req, res){
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
 
   let user = req.body.user
 
@@ -240,6 +266,10 @@ app.get('/vieworders', function (req, res){
 
 app.post('/vieworders', function (req, res){
   connection.getConnection(function (err, connection) {
+    if(err) {
+      console.log(err)
+      return
+    }
   let method = req.body.method
   let orderid = req.body.orderid
 
@@ -268,6 +298,10 @@ app.post('/vieworders', function (req, res){
 
 app.post('/addorder', function (req, res){
   connection.getConnection(function (err, connection) {
+        if(err) {
+      console.log(err)
+      return
+    }
   let itemID = req.body.itemid
   let buyer = req.body.userName
   

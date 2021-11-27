@@ -54,7 +54,7 @@ const loginpressed=()=>{
 
         navigation.push('Home');
       } else {
-        setErrortext(responseJson.msg);
+        setErrortext('Please check your user name id or password');
         console.log('Please check your user name id or password');
       }
     })
@@ -74,6 +74,7 @@ const loginpressed=()=>{
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
      <Text style={styles.logo}>Opticx</Text>
+     <Text style={styles.errorStyle}>{errortext}</Text>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
@@ -152,6 +153,10 @@ const styles = StyleSheet.create({
   },
   loginText:{
     color:"#000000"
+  },
+  errorStyle:{
+    color:"red",
+    padding:10
   },
   signupBtn:{
     width:"50%",
