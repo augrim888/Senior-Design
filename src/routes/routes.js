@@ -18,7 +18,10 @@ app.use(bodyParser.urlencoded({ extended: false}));
 app.get('/user_info', function (req, res) {
     // Connecting to the database.
     connection.getConnection(function (err, connection) {
-
+      if(err) {
+        console.log(err)
+        return
+      }
     // Executing the MySQL query (select all data from the 'users' table).
     connection.query('SELECT * FROM user_info', function (error, results, fields) {
       // If some error occurs, we throw an error.
@@ -64,7 +67,7 @@ app.post('/login', function (req, res) {
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
 
     console.log(returnstatus)
-    res.json({status: returnstatus})
+    res.json({status: returnstatus,role:results[0].role})
   });
 
 

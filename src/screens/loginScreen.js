@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } fro
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import logo from '../assets/opticx.png'
+import AsyncStorage from '@react-native-community/async-storage';
 
 
  const Login = ({navigation}) => {
@@ -51,10 +52,20 @@ const loginpressed=()=>{
       console.log(responseJson);
       // If server response message same as Data Matched
       if (responseJson.status === 'LOGIN SUCCESS') {
+        if(responseJson.role=='vendor')
+        {
+          navigation.push('vendorHome');
+          AsyncStorage(role,userName);
 
-        navigation.push('Home');
+        }
+        else
+        {
+          navigation.push('Home');
+
+        }
+
       } else {
-        setErrortext('Please check your user name id or password');
+        setErrortext('Login failed.Please check your user name id or password');
         console.log('Please check your user name id or password');
       }
     })
@@ -156,7 +167,8 @@ const styles = StyleSheet.create({
   },
   errorStyle:{
     color:"red",
-    padding:10
+    padding:10,
+    fontSize:25
   },
   signupBtn:{
     width:"50%",

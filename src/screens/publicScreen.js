@@ -15,6 +15,8 @@ const Home=({navigation})=>{
 }
   return(
     <View style={Styles.container}>
+      //fetch();
+      //loop responsejson
             <TouchableOpacity style={Styles.buttonStyle} onPress={clickCreate}>
               <TouchableHighlight style= {Styles.buttonClick} />
             <Image source = {order} style = {Styles.buttonImageStyle} position ={'relative'}/>
