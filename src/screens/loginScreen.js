@@ -64,7 +64,9 @@ const loginpressed=()=>{
         }
         else
         {
-          navigation.push('publicHome');
+          navigation.navigate('publicHome',
+          { user: userName }
+          );
 
         }
 
