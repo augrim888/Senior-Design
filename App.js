@@ -29,7 +29,7 @@ const Auth = () => {
         <Stack.Screen
         name="publicHome"
         component={publicHome}
-        options={{headerShown: false}}/>
+        options={{headerShown: true}}/>
       <Stack.Screen
         name="Signup"
         component={Signup}

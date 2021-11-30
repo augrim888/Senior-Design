@@ -4,10 +4,15 @@ import { StyleSheet,ScrollView, Text, View, TouchableOpacity, TextInput, Image, 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import clipboard from '../assets/clipboard.png'
 import order from '../assets/package.png'
-import {card,button} from 'react-native-paper';
+import {
+  NavigationScreenProps,
+  NavigationScreenComponent
+} from 'react-navigation'
 
 
-const publicHome= ({navigation})=>{
+const publicHome= ({route,navigation})=>{
+  const username = route.params.user;
+  
   const getResponse = async () => {
     const response=await fetch('http://localhost:3307/userhome', {
       method: 'GET',
@@ -19,6 +24,11 @@ const publicHome= ({navigation})=>{
     return (glass);
   //console.log(json);
 }
+publicHome.navigationOptions=  {
+  title: 'MyScreen',
+  headerLeft: ()=> null, // Note: using just `null` instead of a function should also work but could trigger a TS error
+}
+
 
         {/*.then((response) => response.json())
         .then((responseJson) =>{
@@ -50,12 +60,14 @@ useEffect(() => {
 }
   return(
     <View style={Styles.container}>
-      <View>{(() => {if(typeof resJSON[0]!="undefined")
+      <Text style={Styles.buttonTextStyle}>   {username.userName}      </Text>
+      <View><ul style ={{ listStyleType: "none" }}>{(() => {if(typeof resJSON[0]!="undefined")
       {
         const results=[];
-        for (var i = 0; i < 3; i++){
+        for (var i = 0; i < Object.keys(resJSON).length; i++){
           var obj = resJSON[i];
           results.push(
+          <li key={obj.itemname} style = {{ listStyleType: "none" }}>
           <TouchableOpacity style={Styles.buttonStyle}>
           <TouchableHighlight style= {Styles.buttonClick} />
           <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
@@ -63,9 +75,10 @@ useEffect(() => {
           <Text style={Styles.buttonTextStyle}>   {obj.itemname}      </Text>
           <Text style={Styles.buttonTextStyle}>     ${obj.price}</Text>
           </TouchableOpacity>
+          </li>
           )
           }
-          return results}})()}</View>
+          return results}})()}</ul></View>
           </View>
 
       );
@@ -134,5 +147,6 @@ lens:{
     backgroundColor: '#a5b0a6',
     width: 1,
     height: 80,
-  }
+  },
+  ul :{listStyleType: "none"}
 });
