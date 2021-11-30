@@ -55,6 +55,8 @@ app.post('/login', function (req, res) {
     if(results.length==0)
     {
       returnstatus = "LOGIN FAILED"
+      res.json({status:returnstatus,role:null})
+      return
     }
     else if(req.body.userPassword.password == results[0].password)
     {
@@ -124,7 +126,7 @@ app.get('/userhome', function (req, res) {
     }
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query('SELECT itemID,itemname,description,imageurl,price FROM items', function (error, results, fields) {
+  connection.query('SELECT itemname,imageurl,price FROM items', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
     // If some error occurs, we throw an error.
   
@@ -132,6 +134,7 @@ app.get('/userhome', function (req, res) {
     //console.log(results[0])
   
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    
     console.log("GOT " + results.length + " ITEMS")
     res.json(results)
 

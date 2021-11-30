@@ -28,7 +28,6 @@ const createOrder = ({navigation})=>{
   return(
 
     <ScrollView style={styles.scrollView}>
-
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
      <View style={styles.inputView} >
@@ -78,7 +77,7 @@ const createOrder = ({navigation})=>{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#bdd1db',
+    backgroundColor: '#1e2b30',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
     padding:10
   },
   scrollView: {
-    backgroundColor: '#bdd1db',
+    backgroundColor: '#1e2b30',
     flexGrow: 1,
     //justifyContent: 'space-between'
   },

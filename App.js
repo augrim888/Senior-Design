@@ -9,6 +9,7 @@ import Login from './src/screens/loginScreen';
 import Signup from './src/screens/Signup';
 import checkOrder from './src/screens/checkOrder';
 import createOrder from './src/screens/createOrder';
+import publicHome from './src/screens/publicScreen';
 
 const Stack = createStackNavigator();
 const Auth = () => {
@@ -24,6 +25,10 @@ const Auth = () => {
         name="Home"
         component={Home}
 
+        options={{headerShown: false}}/>
+        <Stack.Screen
+        name="publicHome"
+        component={publicHome}
         options={{headerShown: false}}/>
       <Stack.Screen
         name="Signup"

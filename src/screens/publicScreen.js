@@ -1,13 +1,48 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
+import { json } from 'body-parser';
+import React,{useEffect, useState} from 'react';
+import { StyleSheet,ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import clipboard from '../assets/clipboard.png'
 import order from '../assets/package.png'
+import {card,button} from 'react-native-paper';
 
-const Home=({navigation})=>{
 
+const publicHome= ({navigation})=>{
+  const getResponse = async () => {
+    const response=await fetch('http://localhost:3307/userhome', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+        }});
+    const glass = await response.json();
+    return (glass);
+  //console.log(json);
+}
 
-  const clickCreate=() => {
+        {/*.then((response) => response.json())
+        .then((responseJson) =>{
+          if (typeof responseJson!="undefined")
+          {
+            setResJSON(responseJson)
+
+          }
+          //console.log(responseJson);
+           //alert('Youre good');
+        })
+        .catch((error) => {
+          //Hide Loader
+          console.error(error);
+        }))*/}
+const [resJSON, setResJSON] = useState({ imageurl: "", itemname: "" })
+useEffect(() => {
+  getResponse().then(glass => {
+    glass && setResJSON(glass)
+  })
+}, []) 
+
+//console.log(glass[0])
+    const clickCreate=() => {
     navigation.push('createOrder')
 }
   const clickCheck=() => {
@@ -15,29 +50,32 @@ const Home=({navigation})=>{
 }
   return(
     <View style={Styles.container}>
-      //fetch();
-      //loop responsejson
-            <TouchableOpacity style={Styles.buttonStyle} onPress={clickCreate}>
-              <TouchableHighlight style= {Styles.buttonClick} />
-            <Image source = {order} style = {Styles.buttonImageStyle} position ={'relative'}/>
-            <View style={Styles.buttonSeperatorStyle} />
-            <Text style={Styles.buttonTextStyle}>create orders</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={Styles.buttonStyle} onPress={clickCheck}>
-            <TouchableHighlight style= {Styles.buttonClick} />
-            <Image source = {clipboard} style = {Styles.buttonImageStyle} />
-            <View style={Styles.buttonSeperatorStyle} />
-                <Text style={Styles.buttonTextStyle}>View Orders</Text>
-            </TouchableOpacity>
+      <View>{(() => {if(typeof resJSON[0]!="undefined")
+      {
+        const results=[];
+        for (var i = 0; i < 3; i++){
+          var obj = resJSON[i];
+          results.push(
+          <TouchableOpacity style={Styles.buttonStyle}>
+          <TouchableHighlight style= {Styles.buttonClick} />
+          <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
+          <View style={Styles.buttonSeperatorStyle} />
+          <Text style={Styles.buttonTextStyle}>   {obj.itemname}      </Text>
+          <Text style={Styles.buttonTextStyle}>     ${obj.price}</Text>
+          </TouchableOpacity>
+          )
+          }
+          return results}})()}</View>
           </View>
+
       );
   }
-export default Home
+export default publicHome
 
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#bdd1db',
+    backgroundColor: '#1e2b30',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -48,6 +86,11 @@ const Styles = StyleSheet.create({
     marginBottom :10,
     padding: 10,
     position:'relative',
+  },
+  scrollView: {
+    backgroundColor: '#1e2b30',
+    flexGrow: 1
+    //justifyContent: 'space-between'
   },
 lens:{
   color:"#000000",
@@ -90,6 +133,6 @@ lens:{
   buttonSeperatorStyle: {
     backgroundColor: '#a5b0a6',
     width: 1,
-    height: 60,
+    height: 80,
   }
 });

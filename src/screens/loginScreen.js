@@ -3,14 +3,19 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } fro
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import logo from '../assets/opticx.png'
-//import AsyncStorage from '@react-native-community/async-storage';
+import * as SecureStore from 'expo-secure-store';
+
+async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
 
 
  const Login = ({navigation}) => {
-     const [userName,setUserName]  = useState('');
+     const [userName,setUserName]  = useState('user_id');
      const [userPassword,setUserPassword] = useState('');
      const [loading, setLoading] = useState(false);
      const [errortext, setErrortext] = useState('');
+     
 
 const loginpressed=()=>{
   setErrortext('');
@@ -54,12 +59,12 @@ const loginpressed=()=>{
       if (responseJson.status === 'LOGIN SUCCESS') {
         if(responseJson.role=='vendor')
         {
-          navigation.push('vendorHome');
+          navigation.push('Home');
 
         }
         else
         {
-          navigation.push('Home');
+          navigation.push('publicHome');
 
         }
 
