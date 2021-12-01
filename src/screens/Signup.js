@@ -198,7 +198,7 @@ const Signup = ({navigation})=>{
          maxLength={32}/>
      </View>
      <View style ={styles.inputText} color={'red'}>
-       worng
+       worng password
     </View>
      </View>
      <View style={styles.inputView} >
