@@ -1,0 +1,1 @@
+/*for this we wwill use expo securetorage to store associated username locally and retreive it. that stops the user from haing to manually input their username each time. also helps to keep them logged in*/
