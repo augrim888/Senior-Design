@@ -7,6 +7,9 @@ import {
   NavigationScreenProps,
   NavigationScreenComponent
 } from 'react-navigation'
+
+const publicHome = ({route,navigation})=>{
+  const username = route.params.user;
   
   const getResponse = async () => {
     const response=await fetch('http://localhost:3307/userhome', {
@@ -47,12 +50,6 @@ useEffect(() => {
 }, []) 
 
 //console.log(glass[0])
-    const clickCreate=() => {
-    navigation.push('createOrder')
-}
-  const clickCheck=() => {
-  navigation.push('createOrder')
-}
   return(
     <View style={Styles.container}>
       <Text style={Styles.buttonTextStyle}>   {username.userName}      </Text>
