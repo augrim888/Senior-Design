@@ -7,13 +7,6 @@ import {
   NavigationScreenProps,
   NavigationScreenComponent
 } from 'react-navigation'
-
-interface Props extends NavigationScreenProps {
-  // ... other props
-}
-
-const publicHome: NavigationStackScreenComponent<Props>= ({route,navigation})=>{
-  const username = route.params.user;
   
   const getResponse = async () => {
     const response=await fetch('http://localhost:3307/userhome', {
