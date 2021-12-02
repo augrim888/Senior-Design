@@ -5,9 +5,10 @@ const cors = require('cors');
 
 const connection = mysql.createPool({
   host     : 'localhost',
-  user     : 'test',
+  user     : 'augrim',
   password : 'Europ@123!',
   database : 'opticx',
+  port     : 3306
 });
 
 const app = express();
@@ -44,14 +45,13 @@ app.post('/login', function (req, res) {
       console.log(err)
       return
     }
-
+    console.log(req.body.user)
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query('SELECT * FROM user_info WHERE user = "' + req.body.userName + '"', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
     // If some error occurs, we throw an error.
   
     if (error) throw error;
-    console.log(results[0])
     if(results.length==0)
     {
       returnstatus = "LOGIN FAILED"
@@ -86,7 +86,10 @@ app.post('/register', function (req, res){
   let password = req.body.password;
   let email = req.body.email;
   let address = req.body.address;
+  let phone = req.body.phone;
+  let name = req.body.name;
   // Executing the MySQL query (select all data from the 'users' table).
+  console.log(address)
   connection.query('SELECT * FROM user_info WHERE user = "' + user + '"', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.user + '"')
     // If some error occurs, we throw an error.
@@ -95,19 +98,19 @@ app.post('/register', function (req, res){
     if(results.length != 0)
     {
       returnstatus = "Error: user already exists"
-      res.send(returnstatus)
+      res.json({status:returnstatus})
       return
     }
     else
     {  
       // Getting the 'response' from the database and sending it to our route. This is were the data is.
       returnstatus = "User successfully registered"
-      connection.query('INSERT INTO user_info VALUES (\''  + user + '\',\'' + password + '\',\'' + email + '\',\'' + address + '\')',function (error, results, fields) {
+      connection.query('INSERT INTO user_info (user,password,name,address,phone,email,role) VALUES (\''  + user + '\',\'' + password + '\',\'' + name + '\',\'' + address + '\',\'' + phone + '\',\'' + email+ '\',\'' + null+ '\')',function (error, results, fields) {
       //console.log('SELECT * FROM user_info WHERE user = "' + req.body.user + '"')
       // If some error occurs, we throw an error.
       //console.log(String.format('INSERT INTO user_info VALUES (%s,%s,%s,%s)',req.body.user,req.body.password,req.body.name,req.body.address))
       if (error) throw error;
-      res.send(returnstatus)
+      res.json({status:returnstatus})
       // Getting the 'response' from the database and sending it to our route. This is were the data is.
       
   });
