@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import logo from '../assets/opticx.png'
 import { useState } from 'react';
@@ -12,8 +12,8 @@ const Signup = ({navigation})=>{
   const [password,setPassword] = useState('')
   const [confirmPass,setConfirmPass] = useState('')
   const [userName,setUserName] = useState('')
+  const [street,setStreet]= useState('')
   const [phone,setPhone] = useState('')
-  const [address,setAddress] = useState('')
   const [city,setCity]= useState('')
   const [state,setState] = useState('')
   const [zipcode, setZipcode] = useState(0)
@@ -72,37 +72,57 @@ const Signup = ({navigation})=>{
     {value:"Wisconsin",label:"WI"},
     {value:"Wyoming",label:"WY"}
     ])
-    const [errortext,setErrortext] = useState('')
-    const [misMatch,setMisMatch] = useState('')
+    const [errortext,setErrorText] = useState('')
+
+    if(Platform.OS === 'android')
+    {
+      DropDownPicker.setListMode("MODAL")
+    }
+    else 
+    {
+      DropDownPicker.setListMode("SCROLLVIEW")
+    }
   ////////////////////////////////////////////////////
   const signupPressed=()=>{
-    setErrortext('');
-    if (!userName) {
-      alert('Please fill in the User Name');
+    if (!name) {
+      setErrorText('Please fill in the Name');
       return;
     }
     if (!email) {
-      alert('Please fill in the User Name');
+      setErrorText('Please fill in the Email');
+      return;
+    }
+    setErrorText('');
+    if (!userName) {
+      setErrorText('Please fill in the User Name');
       return;
     }
     if (!password) {
-      alert('Please fill in the password');
+      setErrorText('Please fill in the password');
       return;
     }
-    if (!email) {
-      alert('Please fill in the User Name');
+    if (!confirmPass) {
+      setErrorText('Please fill in the password');
       return;
     }
-    if (!email) {
-      alert('Please fill in the User Name');
+    if (!phone) {
+      setErrorText('Please fill in the Phone no');
       return;
     }
-    if (!email) {
-      alert('Please fill in the User Name');
+    if (!street) {
+      setErrorText('Please fill in the street Address');
       return;
     }
-    if (!email) {
-      alert('Please fill in the User Name');
+    if (!city) {
+      setErrorText('Please fill in the City');
+      return;
+    }
+    if (!state) {
+      setErrorText('Please fill in the State');
+      return;
+    }
+    if (!zipcode) {
+      setErrorText('Please fill in the Zipcode');
       return;
     }
      /*let formBody = [];
@@ -120,8 +140,13 @@ const Signup = ({navigation})=>{
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
+      name:name,
       userName: userName,
-      userPassword: password
+      password: password,
+      email:email,
+      phone:phone,
+      address:street+','+city+','+state+','+zipcode
+      ,
     })
   
   }
@@ -129,43 +154,32 @@ const Signup = ({navigation})=>{
       .then((response) => response.json())
       .then((responseJson) => {
         //Hide Loader
-  
-        setLoading(false);
-        console.log(responseJson);
+          console.log(responseJson);
         // If server response message same as Data Matched
-        if (responseJson.status === 'LOGIN SUCCESS') {
-          if(responseJson.role=='vendor')
-          {
-            navigation.push('Home');
-  
-          }
-          else
-          {
-        navigation.navigate('publicHome',
-            { user: userName }
-            );
-          }
-  
-        } else {
-          setErrortext('Login failed.Please check your user name id or password');
-          console.log('Please check your user name id or password');
+        if (responseJson.status === 'User successfully registered') {
+          navigation.push('Login')
+        } 
+        else if (responseJson.status =='Error: user already exists'){
+          setErrorText('UserName is already registered, please try another one')
+        }
+        else {
+          setErrorText('Registration failed.Please check your user name or password');
         }
       })
       .catch((error) => {
         //Hide Loader
-        setLoading(false);
         console.error(error);
       });
     };
   ////////////////////////////////////////////////////
-
   return(
 
-    <ScrollView style={styles.scrollView}>
+    <ScrollView style={styles.scrollView} nestedScrollEnabled={true}>
 
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
      <Text style={styles.logo}>Opticx</Text>
+     <View style ={styles.errorStyle}><Text style={{color:'red'}}>{errortext}</Text></View>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
@@ -187,20 +201,36 @@ const Signup = ({navigation})=>{
          placeholderTextColor="#c5ebeb"
          onChangeText={text => setUserName(text)}/>
      </View>
-     <View style={styles.row}>
-     <View style={styles.inputView} >
+     <View style={styles.inputView}  >
        <TextInput
          secureTextEntry
          style={styles.inputText}
          placeholder="Password..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPassword(text)}
+         onChangeText={text=>setPassword(text)}
          maxLength={32}/>
      </View>
-     <View style ={styles.inputText} color={'red'}>
-       worng password
-    </View>
-     </View>
+     <View>{(()=>{
+        var strongPassword =    /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/
+        var mediumPassword = /((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,}))/
+         if(password && password.match(strongPassword))
+         {
+           return(<View style = {{flexDirection:'row'}}><Text style= {{color:'green',padding:10,fontSize:15,fontWeight:'bold',}} >strength - strong</Text></View>)
+         }
+         else if(password && password.match(mediumPassword))
+         {
+           return(<View style = {{flexDirection:'row'}}><Text style= {{color:'yellow',padding:10,fontSize:15,fontWeight:'bold',}}>strength - medium</Text></View>)
+           
+         }
+         else if(password!='')
+         {
+           return(<View style = {{flexDirection:'row'}}><Text style= {{color:'red',padding:10,fontSize:15,fontWeight:'bold'}}>strength -  weak</Text></View>)
+         }
+         else 
+         {
+
+         }
+       })()}</View>
      <View style={styles.inputView} >
        <TextInput
          secureTextEntry
@@ -209,24 +239,25 @@ const Signup = ({navigation})=>{
          placeholderTextColor="#c5ebeb"
          onChangeText={text => setConfirmPass(text)}
          maxLength={32}/>
-     </View>
-     <View style={styles.row}>
-     <View style={styles.rowView }>
+         </View>
+         {(()=>{if(password!=confirmPass && confirmPass!=''){
+           return(<Text style= {{color:'red',padding:10,fontSize:15,fontWeight:'bold'}}>passwords do not match</Text>)
+         }})()}
+     <View style={styles.inputView }>
        <TextInput
          style={styles.inputText}
          placeholder="Street Address"
          placeholderTextColor="#c5ebeb"
-         
-         onChangeText={text => setAddress(text)}/>
+         onChangeText={text => setStreet(text)}/>
      </View>
-     <View style={styles.rowView }>
+     <View style={styles.inputView }>
        <TextInput
          style={styles.inputText}
          placeholder="City"
          placeholderTextColor="#c5ebeb"
          onChangeText={text => setCity(text)}/>
      </View>
-     <View style={styles.rowView} >
+     <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
          placeholder="Zipcode"
@@ -234,9 +265,8 @@ const Signup = ({navigation})=>{
          onChangeText={text => setZipcode(text.replace(/[^0-9]/g, ''))}
          maxLength={5}/>
      </View>
-     </View>
      <View style={styles.dropdown} zIndex={1}>
-     <DropDownPicker
+     <DropDownPicker 
      open={open}
      value={value}
      items={items}
@@ -244,18 +274,24 @@ const Signup = ({navigation})=>{
      setValue={setValue}
      setItems={setItems}
      zIndexInverse={1000}
-     dropDownStyle={{backgroundColor: '#fff'}}
+     dropDownStyle={{backgroundColor: '#465881'}}
      placeholder="Select a state"
+     scrollViewProps={{
+       nestedScrollEnabled: true,}}
+
      placeholderStyle={{
       color: "#c5ebeb",
     }}
      textStyle={{
-      fontSize: 15
+      fontSize: 15,
+      color:'#000000'
     }}
-     containerStyle={{
-       backgroundColor:"#465881"
+    style={{
+      backgroundColor: "#465881",
+      borderColor:'#465881'
     }}
-    labelStyle={styles.inputText}
+    labelStyle={{color:"#fff"}}
+    onChangeValue={value =>setState(value)}
     />
     </View>
      <View style={styles.inputView} >
@@ -266,7 +302,6 @@ const Signup = ({navigation})=>{
          onChangeText={text => setPhone(text.replace(/[^0-9]/g, ''))}
          maxLength={10}/>
      </View>
-     {console.log(phone)}
      <TouchableOpacity style={styles.registerBtn} onPress={signupPressed}>
           <Text style={styles.registerText}>Register</Text>
         </TouchableOpacity>
@@ -286,6 +321,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   row: {
+    width:'31%',
     flex: 2,
     flexDirection: "row",
     alignItems:'center',
@@ -293,7 +329,7 @@ const styles = StyleSheet.create({
     justifyContent:'space-around'
   },
   rowView:{
-    width:"40%",
+    width:"83%",
     backgroundColor:"#465881",
     borderRadius:25,
     height:60,
@@ -312,6 +348,7 @@ const styles = StyleSheet.create({
     padding:10
   },
   dropdown:{
+    minHeight:5,
     width:"80%",
     backgroundColor:"#465881",
     borderRadius:25,
@@ -319,7 +356,7 @@ const styles = StyleSheet.create({
     marginBottom:20,
     justifyContent:"center",
     padding:10,
-    zIndex:10
+    zIndex:10,
   },
   scrollView: {
     backgroundColor: '#1e2b30',
@@ -364,11 +401,21 @@ const styles = StyleSheet.create({
     width:"50%",
     backgroundColor:"#dbd3a7",
     borderRadius:25,
-    height:30,
+    height:45,
     alignItems:"center",
     justifyContent:"center",
     marginTop:10,
     marginBottom:10,
     zIndex:1
   },
+  circle: {
+    backgroundColor:'red',
+    width: 10,
+    height: 10,
+    borderRadius: 5
+ },
+ errorStyle:{
+  padding:10,
+  fontSize:10
+},
 });
