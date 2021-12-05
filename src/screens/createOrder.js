@@ -2,16 +2,22 @@ import React from 'react';
 import { StyleSheet, ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import logo from '../assets/opticx.png'
 import { useState } from 'react';
+import { Component } from 'react';
 
 
-const createOrder = ({navigation})=>{
-    const [itemName,setItemName]  = useState('');
-    const [description,setDescription] = useState('');
-    const [imageURL,setImageURL] = useState('');
-    const [price,setPrice] = useState('');
-    const [user,setUser] = useState('');
+export default class createOrder extends Component{
+    constructor(props) {
+      super(props)
+      this.state = {
+          itemName: '',
+          description:'',
+          imageURL:'',
+          user:'',
+          price:''
+      }
+    }
 
-  const signupPressed=()=>{
+   signupPressed=()=>{
     fetch('http://localhost:3307/additem', {
         method: 'POST',
         headers: {
@@ -19,12 +25,26 @@ const createOrder = ({navigation})=>{
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            
+          itemname:this.state.itemName,
+          description:this.state.description,
+          imageurl:this.state.imageURL,
+          price: this.state.price,
+          user:this.state.user
         })
-      
       })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if(responseJson.status=="ITEM ADDED SUCCESSFULLY")
+          {
+            alert("item added succesfully")
+            this.props.navigation.navigate('Home')
+          }
+          else {
+            alert("An error occured")
+          }
+        })
     };
-
+    render(){
   return(
 
     <ScrollView style={styles.scrollView}>
@@ -35,44 +55,44 @@ const createOrder = ({navigation})=>{
          style={styles.inputText}
          placeholder="Model Name"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setItemName({itemName:text})}/>
+         onChangeText={text => this.setState({itemName:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
          placeholder="Description."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setDescription({description:text})}/>
+         onChangeText={text => this.setState({description:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
          placeholder="Image"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setImageURL({imageURL:text})}/>
+         onChangeText={text => this.setState({imageURL:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
          placeholder="Price"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setPrice({price:text})}/>
+         onChangeText={text => this.setState({price:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
          placeholder="Authorized user Name"
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setUser({user:text})}/>
+         onChangeText={text => this.setState({user:text})}/>
      </View>
-     <TouchableOpacity style={styles.registerBtn} onPress={signupPressed}>
+     <TouchableOpacity style={styles.registerBtn} onPress={this.signupPressed}>
           <Text style={styles.registerText}>Add Item</Text>
         </TouchableOpacity>
     </View>
 </ScrollView>
       );
   }
-  export default createOrder
+}
 
 const styles = StyleSheet.create({
   container: {

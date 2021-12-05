@@ -4,31 +4,29 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import logo from '../assets/opticx.png'
 import * as SecureStore from 'expo-secure-store';
+import { Component } from 'react';
+import StackNav from '../routes/StackNav';
 
-async function save(key, value) {
-  await SecureStore.setItemAsync(key, value);
+class Login extends Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+        userName: '',
+        userPassword:'',
+        errortext:''
+    }
 }
 
-
- const Login = ({navigation}) => {
-     const [userName,setUserName]  = useState('user_id');
-     const [userPassword,setUserPassword] = useState('');
-     const [loading, setLoading] = useState(false);
-     const [errortext, setErrortext] = useState('');
-     
-
-const loginpressed=()=>{
-  setErrortext('');
-  if (!userName) {
+ loginpressed=()=>{
+  this.setState({errortext:''});
+  if (!this.state.userName) {
     alert('Please fill User Name');
     return;
   }
-  if (!userPassword) {
+  if (!this.state.userPassword) {
     alert('Please fill Password');
     return;
   }
-  setLoading(true);
-  let dataToSend = {user: userName, password: userPassword};
   /*let formBody = [];
   for (let key in dataToSend) {
     let encodedKey = key;
@@ -44,8 +42,8 @@ const loginpressed=()=>{
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    userName: userName,
-    userPassword: userPassword
+    userName: this.state.userName,
+    userPassword: this.state.userPassword
   })
 
 }
@@ -54,49 +52,52 @@ const loginpressed=()=>{
     .then((responseJson) => {
       //Hide Loader
 
-      setLoading(false);
       console.log(responseJson);
       // If server response message same as Data Matched
       if (responseJson.status === 'LOGIN SUCCESS') {
         if(responseJson.role=='vendor')
         {
-          navigation.push('Home');
-
+         
+          this.props.navigation.replace('stackNavigationRoutes', {
+            screen: 'Home',
+            params: { user: responseJson.name }
+          });
         }
         else
         {
-		  navigation.navigate('publicHome',
-          { user: userName }
-          );
+          this.props.navigation.replace('stackNavigationRoutes',{
+            screen: 'publicHome',
+            params: { user: responseJson.name }
+          })
         }
 
       } else {
-        setErrortext('Login failed.Please check your user name id or password');
+        this.setState({errortext:'Login failed.Please check your user name id or password'});
         console.log('Please check your user name id or password');
       }
     })
     .catch((error) => {
       //Hide Loader
-      setLoading(false);
       console.error(error);
     });
   };
 
-  const signup=() => {
-      navigation.push("Signup")
+   signup=() => {
+      this.props.navigation.navigate('Signup')
   };
-  
+  render(){
+     
   return(
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
-     <Text style={styles.logo}>Opticx</Text>
-     <Text style={styles.errorStyle}>{errortext}</Text>
+     <Text style={styles.logo}>Optic Origin</Text>
+     <Text style={styles.errorStyle}>{this.state.errortext}</Text>
      <View style={styles.inputView} >
        <TextInput
          style={styles.inputText}
          placeholder="User Name..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setUserName(text)}/>
+         onChangeText={text => this.setState({userName:text})}/>
      </View>
      <View style={styles.inputView} >
        <TextInput
@@ -104,20 +105,21 @@ const loginpressed=()=>{
          style={styles.inputText}
          placeholder="Password..."
          placeholderTextColor="#c5ebeb"
-         onChangeText={text => setUserPassword(text)}/>
+         onChangeText={text => this.setState({userPassword:text})}/>
      </View>
      <TouchableOpacity>
           <Text style={styles.forgot}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn} onPress={loginpressed}>
+        <TouchableOpacity style={styles.loginBtn} onPress={this.loginpressed}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.signupBtn} onPress={signup}>
+        <TouchableOpacity style={styles.signupBtn} onPress={this.signup}>
           <Text style={styles.loginText}>Signup</Text>
         </TouchableOpacity>
    </View>
       );
   }
+}
   export default Login
 
 const styles = StyleSheet.create({

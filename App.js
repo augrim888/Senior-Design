@@ -3,12 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 // Import Navigators from React Navigation
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './src/screens/pickScreen';
 import Login from './src/screens/loginScreen';
 import Signup from './src/screens/Signup';
-import checkOrder from './src/screens/checkOrder';
-import createOrder from './src/screens/createOrder';
-import publicHome from './src/screens/publicScreen';
+import StackNav from './src/routes/StackNav';
 
 const Stack = createStackNavigator();
 const Auth = () => {
@@ -20,20 +17,13 @@ const Auth = () => {
         component={Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Home"
-        component={Home}
 
-        options={{headerShown: false}}/>
-        <Stack.Screen
-        name="publicHome"
-        component={publicHome}
-        options={{headerShown: true}}/>
       <Stack.Screen
         name="Signup"
         component={Signup}
         options={{
-          title: 'Signup', //Set Header Title
+          title: 'Signup',
+          headerLeft:null, //Set Header Title
           headerStyle: {
             backgroundColor: '#307ecc', //Set Header color
           },
@@ -42,19 +32,7 @@ const Auth = () => {
             fontWeight: 'bold', //Set Header text style
           },
         }}/>
-        <Stack.Screen
-        name="createOrder"
-        component={createOrder}
-        options={{
-          title: 'createOrder', //Set Header Title
-          headerStyle: {
-            backgroundColor: '#307ecc', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}/>
+        
         {/*<Stack.Screen
         name="checkOrder"
         component={checkOrder}
@@ -82,16 +60,18 @@ const App = () => {
           component={Auth}
           options={{headerShown: false}}
         />
-        {/* Navigation Drawer as a landing page */}
-       {/*<Stack.Screen
-          name="DrawerNavigationRoutes"
-          component={DrawerNavigationRoutes}
+        {/*Navigation Drawer as a landing page */}
+
+       <Stack.Screen
+          name="stackNavigationRoutes"
+          component={StackNav}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
-       />*/}
+       />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-export default App;
+export default (App);

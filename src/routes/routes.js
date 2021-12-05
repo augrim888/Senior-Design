@@ -5,10 +5,9 @@ const cors = require('cors');
 
 const connection = mysql.createPool({
   host     : 'localhost',
-  user     : 'augrim',
+  user     : 'root',
   password : 'Europ@123!',
   database : 'opticx',
-  port     : 3306
 });
 
 const app = express();
@@ -45,7 +44,6 @@ app.post('/login', function (req, res) {
       console.log(err)
       return
     }
-    console.log(req.body.user)
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query('SELECT * FROM user_info WHERE user = "' + req.body.userName + '"', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
@@ -69,7 +67,8 @@ app.post('/login', function (req, res) {
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
 
     console.log(returnstatus)
-    res.json({status: returnstatus,role:results[0].role})
+    res.json({status: returnstatus,role:results[0].role,name:results[0].name})
+    return
   });
 
 
@@ -130,7 +129,7 @@ app.get('/userhome', function (req, res) {
     }
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query('SELECT itemname,imageurl,price FROM items', function (error, results, fields) {
+  connection.query('SELECT itemname,imageurl,price,description FROM items', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
     // If some error occurs, we throw an error.
   
@@ -140,7 +139,7 @@ app.get('/userhome', function (req, res) {
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
     
     console.log("GOT " + results.length + " ITEMS")
-    res.json(results)
+    res.send({reply:[results]})
 
   });
 
@@ -221,9 +220,9 @@ app.post('/additem', function (req, res){
   let price = req.body.price
   let user = req.body.user
 
-  connection.query('INSERT INTO items (itemname,description,imageurl,price,addedby) VALUES (\"' + itemname +'\",\"' + description +'\", \"' + imageurl +'\",\"' + price + '\",\"' + user + '\")', function (error, results, fields){
+  connection.query('INSERT INTO items (itemname,description,imageurl,price,authorized_user) VALUES (\"' + itemname +'\",\"' + description +'\", \"' + imageurl +'\",\"' + price + '\",\"' + user + '\")', function (error, results, fields){
     if (error) throw error;
-    else res.send("ITEM ADDED SUCCESSFULLY")
+    else res.json({status:"ITEM ADDED SUCCESSFULLY"})
   })
 });
 });

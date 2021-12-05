@@ -3,25 +3,45 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } fro
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import clipboard from '../assets/clipboard.png'
 import order from '../assets/package.png'
+import { Component } from 'react';
 
-const Home=({navigation})=>{
+
+export default class Home extends Component{
+  constructor(props) {
+    super(props)
+    this.state = { 
+      user:this.props.route.params.user
+        }
+    this.props.navigation.setOptions({title:'Welcome '+ this.state.user})
+    //this.props.navigation.setOptions({headerLeft:()=>null})
+  }
 
 
-  const clickCreate=() => {
-    navigation.push('createOrder')
+ clickCreate=() => {
+  this.props.navigation.navigate('createOrder')
 }
-  const clickCheck=() => {
-  navigation.push('createOrder')
+ clickCheck=() => {
+  this.props.navigation.navigate('createOrder')
 }
+ viewItems =()=>{
+  this.props.navigation.navigate('viewItems')
+}
+render(){
   return(
     <View style={Styles.container}>
-            <TouchableOpacity style={Styles.buttonStyle} onPress={clickCreate}>
+            <TouchableOpacity style={Styles.buttonStyle} onPress={this.clickCreate}>
               <TouchableHighlight style= {Styles.buttonClick} />
             <Image source = {order} style = {Styles.buttonImageStyle} position ={'relative'}/>
             <View style={Styles.buttonSeperatorStyle} />
             <Text style={Styles.buttonTextStyle}>create orders</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={Styles.buttonStyle} onPress={clickCheck}>
+            <TouchableOpacity style={Styles.buttonStyle} onPress={this.clickCheck}>
+            <TouchableHighlight style= {Styles.buttonClick} />
+            <Image source = {clipboard} style = {Styles.buttonImageStyle} />
+            <View style={Styles.buttonSeperatorStyle} />
+                <Text style={Styles.buttonTextStyle}>View Orders</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={Styles.buttonStyle} onPress={this.viewItems}>
             <TouchableHighlight style= {Styles.buttonClick} />
             <Image source = {clipboard} style = {Styles.buttonImageStyle} />
             <View style={Styles.buttonSeperatorStyle} />
@@ -30,7 +50,7 @@ const Home=({navigation})=>{
           </View>
       );
   }
-export default Home
+}
 
 const Styles = StyleSheet.create({
   container: {

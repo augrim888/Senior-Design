@@ -1,16 +1,55 @@
-/*import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/pickScreen';
-import Login from '../screens/loginScreen';
-import Signup from '../screens/Signup'
+import createOrder from '../screens/createOrder';
+import publicHome from '../screens/publicScreen';
+import itemInfo from '../screens/publicScreen';
+import { Component } from 'react';
 import React from 'react';
-const Stack = createStackNavigator();
-const StackNav = () => {
+export default  class StackNav extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            Stack : createStackNavigator()
+        }
+    }
+render(){
 return (
-<Stack.Navigator>
-<Stack.Screen name="Login" component={Login} />
-<Stack.Screen name="Home" component={Home} />
-<Stack.Screen name="Signup" component={Signup} />
-</Stack.Navigator>
+<this.state.Stack.Navigator initialRouteName="publicHome">
+<this.state.Stack.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: true}}/>
+        <this.state.Stack.Screen
+        name="publicHome"
+        component={publicHome}
+        options={{headerShown: true}}/>
+        <this.state.Stack.Screen
+        name="createOrder"
+        component={createOrder}
+        options={{
+          title: 'createOrder', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}/>
+        <this.state.Stack.Screen
+        name="itemInfo"
+        component={createOrder}
+        options={{
+          title: 'item Information', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}/>
+</this.state.Stack.Navigator>
 )
 }
-export default StackNav*/
+}

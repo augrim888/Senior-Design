@@ -7,11 +7,31 @@ import {
   NavigationScreenProps,
   NavigationScreenComponent
 } from 'react-navigation'
-
-const publicHome = ({route,navigation})=>{
-  const username = route.params.user;
+import { DefaultNavigatorOptions } from '@react-navigation/native';
+import { Component } from 'react';
+import { runInThisContext } from 'vm';
+import StackNav from '../routes/StackNav';
   
-  const getResponse = async () => {
+
+export default class publicHome extends Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+        user:this.props.route.params.user,
+        resJSON:[]
+    }
+    this.itemInfo = this.itemInfo.bind(this)
+    this.props.navigation.setOptions({title:'Welcome '+ this.state.user})
+    //this.props.navigation.setOptions({headerLeft:()=>null})
+}
+itemInfo=(name,description,price,imageurl)=>{
+  this.props.navigation.navigate('itemInfo',{itemName:name,itemDescription:description,itemPrice:price,imageURL:imageurl})
+}
+componentDidMount(){
+  this.getResponse().then(glass => glass && this.setState({ resJSON: glass.reply }),console.log(glass))
+  console.log(this.state.resJSON)
+}
+  getResponse = async () => {
     const response=await fetch('http://localhost:3307/userhome', {
       method: 'GET',
       headers: {
@@ -19,64 +39,35 @@ const publicHome = ({route,navigation})=>{
         'Content-Type': 'application/json'
         }});
     const glass = await response.json();
-    return (glass);
-  //console.log(json);
-}
-publicHome.navigationOptions=  {
-  title: 'MyScreen',
-  headerLeft: ()=> null, // Note: using just `null` instead of a function should also work but could trigger a TS error
-}
-
-
-        {/*.then((response) => response.json())
-        .then((responseJson) =>{
-          if (typeof responseJson!="undefined")
-          {
-            setResJSON(responseJson)
-
-          }
-          //console.log(responseJson);
-           //alert('Youre good');
-        })
-        .catch((error) => {
-          //Hide Loader
-          console.error(error);
-        }))*/}
-const [resJSON, setResJSON] = useState({ imageurl: "", itemname: "" })
-useEffect(() => {
-  getResponse().then(glass => {
-    glass && setResJSON(glass)
-  })
-}, []) 
-
-//console.log(glass[0])
+    return glass;
+  } 
+render(){
   return(
     <View style={Styles.container}>
-      <Text style={Styles.buttonTextStyle}>   {username.userName}      </Text>
-      <View><ul style ={{ listStyleType: "none" }}>{(() => {if(typeof resJSON[0]!="undefined")
-      {
+      <View><ul style ={{ listStyleType: "none" }}>{(() => 
+      {  
+        /*console.log(this.state.resJSON)
         const results=[];
-        for (var i = 0; i < Object.keys(resJSON).length; i++){
-          var obj = resJSON[i];
+        for (var i = 0; i < Object.keys(this.state.resJSON).length; i++){
+          var obj = this.state.resJSON[i];
           results.push(
           <li key={obj.itemname} style = {{ listStyleType: "none" }}>
           <TouchableOpacity style={Styles.buttonStyle}>
           <TouchableHighlight style= {Styles.buttonClick} />
           <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
           <View style={Styles.buttonSeperatorStyle} />
-          <Text style={Styles.buttonTextStyle}>   {obj.itemname}      </Text>
-          <Text style={Styles.buttonTextStyle}>     ${obj.price}</Text>
+          <Text style={Styles.buttonTextStyle}> {obj.itemname}</Text>
+          <Text style={Styles.buttonTextStyle}> ${obj.price}</Text>
           </TouchableOpacity>
           </li>
           )
           }
-          return results}})()}</ul></View>
+        return results*/})()}lol</ul></View>
           </View>
 
       );
   }
-export default publicHome
-
+}
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -134,10 +125,12 @@ lens:{
     color: '#fff',
     marginBottom: 4,
     marginLeft: 10,
+    padding:5
   },
   buttonSeperatorStyle: {
     backgroundColor: '#a5b0a6',
     width: 1,
     height: 80,
-  }
+  },
+  ul :{listStyleType: "none"}
 });
