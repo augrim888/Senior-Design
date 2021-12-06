@@ -18,55 +18,60 @@ export default class publicHome extends Component{
     super(props)
     this.state = {
         user:this.props.route.params.user,
-        resJSON:[]
+        resJSON:null
     }
-    this.itemInfo = this.itemInfo.bind(this)
+      //props.things.forEach(thing => {
+      //this[`${thing}_ref`] = React.createRef()
+     //});
     this.props.navigation.setOptions({title:'Welcome '+ this.state.user})
     //this.props.navigation.setOptions({headerLeft:()=>null})
 }
-itemInfo=(name,description,price,imageurl)=>{
-  this.props.navigation.navigate('itemInfo',{itemName:name,itemDescription:description,itemPrice:price,imageURL:imageurl})
+
+gotoItems=(name,price,description,URL)=>{
+  this.props.navigation.navigate('itemInfo',{itemName:name,itemPrice:price,itemDescription:description,imageurl:URL})
 }
-componentDidMount(){
-  this.getResponse().then(glass => glass && this.setState({ resJSON: glass.reply }),console.log(glass))
-  console.log(this.state.resJSON)
-}
+
   getResponse = async () => {
     const response=await fetch('http://localhost:3307/userhome', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-        }});
+      }});
     const glass = await response.json();
     return glass;
   } 
-render(){
-  return(
-    <View style={Styles.container}>
-      <View><ul style ={{ listStyleType: "none" }}>{(() => 
-      {  
-        /*console.log(this.state.resJSON)
-        const results=[];
-        for (var i = 0; i < Object.keys(this.state.resJSON).length; i++){
-          var obj = this.state.resJSON[i];
-          results.push(
-          <li key={obj.itemname} style = {{ listStyleType: "none" }}>
-          <TouchableOpacity style={Styles.buttonStyle}>
-          <TouchableHighlight style= {Styles.buttonClick} />
-          <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
-          <View style={Styles.buttonSeperatorStyle} />
-          <Text style={Styles.buttonTextStyle}> {obj.itemname}</Text>
-          <Text style={Styles.buttonTextStyle}> ${obj.price}</Text>
-          </TouchableOpacity>
-          </li>
-          )
-          }
-        return results*/})()}lol</ul></View>
-          </View>
-
-      );
+  renderView =()=> {
+    
   }
+render(){
+  if(this.state.resJSON!=null&&this.state.resJSON!="undefined"){
+    const list = this.state.resJSON
+    console.log(list)
+  return( 
+  <View style={Styles.container}>
+  <View><ul style ={{ listStyleType: "none" }}>{
+  list.map((obj) => { 
+  return (
+  <li key={obj.itemname} style = {{ listStyleType: "none" }} >
+  <TouchableOpacity style={Styles.buttonStyle} key={obj.itemname}  onPress={() => this.gotoItems(obj.itemname,obj.price,obj.description,obj.imageurl)} >
+  <TouchableHighlight style= {Styles.buttonClick} />
+  <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
+  <View style={Styles.buttonSeperatorStyle} />
+  <Text style={Styles.buttonTextStyle}> {obj.itemname}</Text>
+  <Text style={Styles.buttonTextStyle}> ${obj.price} </Text>
+  </TouchableOpacity>
+  </li>
+  )
+  })}
+  </ul></View>
+    </View>
+  )}
+  else {
+      this.getResponse().then(glass => {glass && this.setState({ resJSON: glass.reply })})
+      return null;
+    }
+}
 }
 const Styles = StyleSheet.create({
   container: {
@@ -110,12 +115,12 @@ lens:{
     width:250,
     borderRadius: 5,
     margin: 5,
+    alignSelf:"center",
   },
   buttonClick: {
     backgroundColor: '#07a809',
   },
   buttonImageStyle: {
-    padding: 10,
     margin: 5,
     height: 80,
     width: 80,

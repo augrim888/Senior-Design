@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/pickScreen';
 import createOrder from '../screens/createOrder';
 import publicHome from '../screens/publicScreen';
-import itemInfo from '../screens/publicScreen';
+import itemInfo from '../screens/itemInfo';
 import { Component } from 'react';
 import React from 'react';
 export default  class StackNav extends Component {
@@ -38,7 +38,7 @@ return (
         }}/>
         <this.state.Stack.Screen
         name="itemInfo"
-        component={createOrder}
+        component={itemInfo}
         options={{
           title: 'item Information', //Set Header Title
           headerStyle: {

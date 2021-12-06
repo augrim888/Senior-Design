@@ -14,7 +14,7 @@ export default class itemInfo extends Component{
       name:this.props.route.params.itemName,
       description:this.props.route.params.itemDescription,
       price:this.props.route.params.itemPrice,
-      imageURL:this.props.route.params.imageURL
+      imageURL:this.props.route.params.imageurl,
     }
 }
 
@@ -32,17 +32,18 @@ export default class itemInfo extends Component{
   {
     this.setState({imageURL:'https://pngimg.com/uploads/glasses/glasses_PNG54352.png'})
   }
-  if(!this.state.itemPrice)
+  if(!this.state.price) 
   {
-    this.setState({itemPrice:'https://pngimg.com/uploads/glasses/glasses_PNG54352.png'})
+    this.setState({price:'0.0'})
   }
 }
   render(){
-     
+     console.log(this.props.route.params)
   return(
     <View style={styles.container}>
       <Image source={this.state.imageURL} style={styles.logostyle} /> 
       <Text style={styles.logo}>{this.state.name}</Text>
+      <Text style={styles.inputText}>${this.state.price}</Text>
       <Text style={styles.inputText}>{this.state.description}</Text>
      </View>
       );
@@ -77,8 +78,8 @@ const styles = StyleSheet.create({
     color:"white"
   },
   logostyle:{
-  width: 150, 
-  height: 100, 
+  width: 300, 
+  height: 300, 
   resizeMode:'contain',
   position:'relative'
   },
