@@ -139,7 +139,7 @@ app.get('/userhome', function (req, res) {
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
     
     console.log("GOT " + results.length + " ITEMS")
-    res.send({reply:[results]})
+    res.send({reply:results})
 
   });
 
@@ -162,7 +162,7 @@ app.get('/viewitems', function (req, res) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
     // If some error occurs, we throw an error.
   
-    if (error) throw error;
+    if (error) throw error; 
     //console.log(results[0])
   
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
