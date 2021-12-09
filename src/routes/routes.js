@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const connection = mysql.createPool({
   host     : 'localhost',
-  user     : 'root',
+  user     : 'test',
   password : 'Europ@123!',
   database : 'opticx',
 });
@@ -67,7 +67,7 @@ app.post('/login', function (req, res) {
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
 
     console.log(returnstatus)
-    res.json({status: returnstatus,role:results[0].role,name:results[0].name})
+    res.json({status: returnstatus,role:results[0].role,name:results[0].name,username:results[0].user})
     return
   });
 
@@ -104,7 +104,7 @@ app.post('/register', function (req, res){
     {  
       // Getting the 'response' from the database and sending it to our route. This is were the data is.
       returnstatus = "User successfully registered"
-      connection.query('INSERT INTO user_info (user,password,name,address,phone,email,role) VALUES (\''  + user + '\',\'' + password + '\',\'' + name + '\',\'' + address + '\',\'' + phone + '\',\'' + email+ '\',\'' + null+ '\')',function (error, results, fields) {
+      connection.query('INSERT INTO user_info (user,password,name,street,city,state,zipcode,phone,email,role) VALUES (\''  + user + '\',\'' + password + '\',\'' + name + '\',\'' + street + '\',\''+ city  + '\',\'' + state + '\',\'' + zipcode + '\',\'' + phone + '\',\'' + email+ '\',\'' + null+ '\')',function (error, results, fields) {
       //console.log('SELECT * FROM user_info WHERE user = "' + req.body.user + '"')
       // If some error occurs, we throw an error.
       //console.log(String.format('INSERT INTO user_info VALUES (%s,%s,%s,%s)',req.body.user,req.body.password,req.body.name,req.body.address))
@@ -129,7 +129,7 @@ app.get('/userhome', function (req, res) {
     }
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query('SELECT itemname,imageurl,price,description FROM items', function (error, results, fields) {
+  connection.query('SELECT itemID,itemname,imageurl,price,description FROM items where circulation =\"true\"', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
     // If some error occurs, we throw an error.
   
@@ -147,7 +147,7 @@ app.get('/userhome', function (req, res) {
 });
 });
 
-app.get('/viewitems', function (req, res) {
+app.post('/viewitems', function (req, res) {
   // Connecting to the database.
   
   connection.getConnection(function (err, connection) {
@@ -155,10 +155,11 @@ app.get('/viewitems', function (req, res) {
       console.log(err)
       return
     }
+    console.log(req.body.userName)
   connection.query('SELECT clinicname FROM user_info WHERE user = \"' + req.body.userName + "\"", function (error,userresult, fields){
   // Executing the MySQL query (select all data from the 'users' table).
   if (error) throw error;
-  connection.query('SELECT * FROM items WHERE addedby = \"' + userresult[0].clinicname + "\"", function (error, results, fields) {
+  connection.query('SELECT itemID,itemname,imageurl,price,description FROM items WHERE authorized_user = \"' + userresult[0].clinicname + "\" and circulation =\"true\"", function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.userName.userName + '"')
     // If some error occurs, we throw an error.
   
@@ -166,8 +167,8 @@ app.get('/viewitems', function (req, res) {
     //console.log(results[0])
   
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
-    console.log("GOT " + results.length + " ITEMS")
-    res.json(results)
+    console.log("GOT this many" + results.length + " ITEMS")
+    res.json({reply:results})
 
   });
 
@@ -175,7 +176,8 @@ app.get('/viewitems', function (req, res) {
 });
 });
 
-app.post('/viewitems', function (req, res){
+
+app.post('/modifyitems', function (req, res){
   connection.getConnection(function (err, connection) {
     if(err) {
       console.log(err)
@@ -186,17 +188,17 @@ app.post('/viewitems', function (req, res){
 
   if(method == "delete")
   {
-    connection.query('DELETE FROM items WHERE itemID = ' + itemid, function (error, results, fields){
+    connection.query('UPDATE items SET circulation = \"' + 'false\"' +  ' WHERE itemID = ' + itemid, function(error, results, fields){
       if (error) throw error;
       else res.send("ITEM DELETED SUCCESSFULLY")
     })
   }
   else if(method == "edit")
   {
-    let itemname = req.body.itemname
-    let description = req.body.description
-    let imageurl = req.body.imageurl
-    let price = req.body.price
+    let itemname = req.body.itemName
+    let description = req.body.itemDescription
+    let imageurl = req.body.imageURL
+    let price = req.body.itemPrice
     connection.query('UPDATE items SET itemname = \"' + itemname + '\",description = \"' + description + '\", imageurl = \"' + imageurl + '\", price = ' + price + ' WHERE itemID = ' + itemid, function(error, results, fields){
 
     if (error) throw error;
@@ -284,7 +286,7 @@ app.post('/vieworders', function (req, res){
 
   if(method == "delete")
   {
-    connection.query('DELETE FROM orders WHERE orderID = ' + orderid, function (error, results, fields){
+    connection.query('Update FROM orders WHERE orderID = ' + orderid, function (error, results, fields){
       if (error) throw error;
       else res.send("ORDER DELETED SUCCESSFULLY")
     })

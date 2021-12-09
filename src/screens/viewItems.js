@@ -11,7 +11,7 @@ import { DefaultNavigatorOptions } from '@react-navigation/native';
 import { Component } from 'react';
   
 
-export default class publicHome extends Component{
+export default class viewItems extends Component{
   constructor(props) {
     super(props)
     this.state = {
@@ -19,39 +19,39 @@ export default class publicHome extends Component{
         user:this.props.route.params.userName,
         resJSON:null
     }
-      //props.things.forEach(thing => {
-      //this[`${thing}_ref`] = React.createRef()
-     //});
-    this.props.navigation.setOptions({title:'Welcome '+ this.state.name})
+    this.props.navigation.setOptions({title:'Current Items'})
     //this.props.navigation.setOptions({headerLeft:()=>null})
 }
 
-gotoItems=(name,price,description,URL)=>{
-  this.props.navigation.navigate('itemInfo',{itemName:name,itemPrice:price,itemDescription:description,imageurl:URL})
+gotoItems=(id,name,price,description,URL)=>{
+  this.props.navigation.navigate('vendorItems',{itemID:id,itemName:name,itemPrice:price,itemDescription:description,imageurl:URL})
 }
 
   getResponse = async () => {
-    const response=await fetch('http://localhost:3307/userhome', {
-      method: 'GET',
+    const response=await fetch('http://localhost:3307/viewitems', {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-      }});
+      } ,
+      body: JSON.stringify({
+        userName: this.state.user,
+      })});
     const glass = await response.json();
     return glass;
-  } 
- 
+  }
+
 render(){
   if(this.state.resJSON!=null&&this.state.resJSON!="undefined"){
     const list = this.state.resJSON
     console.log(list)
   return( 
   <View style={Styles.container}>
-  <View><ul style ={{listStyleType:'none'}}>{
+  <View><ul style = {{listStyleType:'none'}}>{
   list.map((obj) => { 
   return (
-  <li key={obj.itemname} >
-  <TouchableOpacity style={Styles.buttonStyle} key={obj.itemname}  onPress={() => this.gotoItems(obj.itemname,obj.price,obj.description,obj.imageurl)} >
+  <li key={obj.itemID} >
+  <TouchableOpacity style={Styles.buttonStyle} key={obj.itemname}  onPress={() => this.gotoItems(obj.itemID,obj.itemname,obj.price,obj.description,obj.imageurl)} >
   <TouchableHighlight style= {Styles.buttonClick} />
   <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
   <View style={Styles.buttonSeperatorStyle} />

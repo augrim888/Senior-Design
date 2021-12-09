@@ -45,7 +45,6 @@ class Login extends Component{
     userName: this.state.userName,
     userPassword: this.state.userPassword
   })
-
 }
 )
     .then((response) => response.json())
@@ -60,14 +59,15 @@ class Login extends Component{
          
           this.props.navigation.replace('stackNavigationRoutes', {
             screen: 'Home',
-            params: { user: responseJson.name }
+            params: { name: responseJson.name,userName:responseJson.username }
           });
         }
         else
         {
           this.props.navigation.replace('stackNavigationRoutes',{
             screen: 'publicHome',
-            params: { user: responseJson.name }
+            params: { name: responseJson.name,
+            userName:responseJson.username}
           })
         }
 

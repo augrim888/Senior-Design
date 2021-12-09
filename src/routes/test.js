@@ -8,7 +8,7 @@ exports.getTest = (req,res) => {
     const connection = mysql.createPool({
         host     : 'localhost',
         user     : 'spencer',
-        port: 3306,
+        port: 3307,
         password : 'password123',
         database : 'opticx',
         connectionLimit : 0,

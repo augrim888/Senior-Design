@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import logo from '../assets/opticx.png'
 import * as SecureStore from 'expo-secure-store';
 import { Component } from 'react';
-import StackNav from '../routes/StackNav';
 
 export default class itemInfo extends Component{
   constructor(props) {
@@ -16,6 +15,8 @@ export default class itemInfo extends Component{
       price:this.props.route.params.itemPrice,
       imageURL:this.props.route.params.imageurl,
     }
+    this.props.navigation.setOptions({title: this.state.name})
+
 }
 
  addCart=()=>{
@@ -25,7 +26,7 @@ export default class itemInfo extends Component{
     return;
   }
   if (!this.state.description) {
-    this.setState({description:'these glasses are still not available'})
+    this.setState({description:'these glasses are still under review, Please come back later or edit this if you have the information.'})
     return;
   }
   if(!this.state.imageURL)
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
   },
   inputText:{
     height:50,
+    width:80,
     color:"white"
   },
   logostyle:{

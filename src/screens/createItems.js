@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Component } from 'react';
 
 
-export default class createOrder extends Component{
+export default class createItems extends Component{
     constructor(props) {
       super(props)
       this.state = {

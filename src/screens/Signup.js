@@ -166,8 +166,10 @@ export default class Signup extends Component{
       password: this.state.password,
       email:this.state.email,
       phone:this.state.phone,
-      address:this.state.street+','+this.state.city+','+this.state.states+','+this.state.zipcode
-      ,
+      address:this.state.street,
+      city:this.state.city,
+      states: this.state.states,
+      zipcode:this.state.zipcode
     })
   
   }
@@ -351,24 +353,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1e2b30',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  row: {
-    width:'31%',
-    flex: 2,
-    flexDirection: "row",
-    alignItems:'center',
-    flexWrap: "nowrap",
-    justifyContent:'space-around'
-  },
-  rowView:{
-    width:"83%",
-    backgroundColor:"#465881",
-    borderRadius:25,
-    height:60,
-    marginBottom:20,
-    marginHorizontal:10,
-    justifyContent:"center",
-    padding:10
   },
   inputView:{
     width:"80%",
