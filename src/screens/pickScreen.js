@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import clipboard from '../assets/clipboard.png'
-import order from '../assets/package.png'
+import addition from '../assets/add.png'
+import label from '../assets/shipping.png'
 import { Component } from 'react';
 
 
@@ -10,34 +11,35 @@ export default class Home extends Component{
   constructor(props) {
     super(props)
     this.state = { 
-      user:this.props.route.params.user
+      name:this.props.route.params.name,
+      user:this.props.route.params.userName
         }
-    this.props.navigation.setOptions({title:'Welcome '+ this.state.user})
+    this.props.navigation.setOptions({title:'Welcome '+ this.state.name})
     //this.props.navigation.setOptions({headerLeft:()=>null})
   }
 
 
  clickCreate=() => {
-  this.props.navigation.navigate('createOrder')
+  this.props.navigation.navigate('createItems')
 }
  clickCheck=() => {
-  this.props.navigation.navigate('createOrder')
+  this.props.navigation.navigate('createItems')
 }
  viewItems =()=>{
-  this.props.navigation.navigate('viewItems')
+  this.props.navigation.navigate('viewItems',{name:this.state.name,userName:this.state.user} )
 }
 render(){
   return(
     <View style={Styles.container}>
             <TouchableOpacity style={Styles.buttonStyle} onPress={this.clickCreate}>
               <TouchableHighlight style= {Styles.buttonClick} />
-            <Image source = {order} style = {Styles.buttonImageStyle} position ={'relative'}/>
+            <Image source = {addition} style = {Styles.buttonImageStyle} position ={'relative'}/>
             <View style={Styles.buttonSeperatorStyle} />
-            <Text style={Styles.buttonTextStyle}>create orders</Text>
+            <Text style={Styles.buttonTextStyle}>Add Items</Text>
             </TouchableOpacity>
             <TouchableOpacity style={Styles.buttonStyle} onPress={this.clickCheck}>
             <TouchableHighlight style= {Styles.buttonClick} />
-            <Image source = {clipboard} style = {Styles.buttonImageStyle} />
+            <Image source = {label} style = {Styles.buttonImageStyle} />
             <View style={Styles.buttonSeperatorStyle} />
                 <Text style={Styles.buttonTextStyle}>View Orders</Text>
             </TouchableOpacity>
@@ -45,7 +47,7 @@ render(){
             <TouchableHighlight style= {Styles.buttonClick} />
             <Image source = {clipboard} style = {Styles.buttonImageStyle} />
             <View style={Styles.buttonSeperatorStyle} />
-                <Text style={Styles.buttonTextStyle}>View Orders</Text>
+                <Text style={Styles.buttonTextStyle}>View Items</Text>
             </TouchableOpacity>
           </View>
       );
