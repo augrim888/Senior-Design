@@ -20,6 +20,9 @@ export default class itemInfo extends Component{
 }
 
  addCart=()=>{
+  this.props.navigation.goBack(null)
+}
+ checkInfo=()=>{
   this.setState({errortext:''});
   if (!this.state.name) {
     this.setState({name:'Glasses'})
@@ -37,15 +40,19 @@ export default class itemInfo extends Component{
   {
     this.setState({price:'0.0'})
   }
-}
+ }
   render(){
      console.log(this.props.route.params)
+     this.checkInfo
   return(
     <View style={styles.container}>
       <Image source={this.state.imageURL} style={styles.logostyle} /> 
       <Text style={styles.logo}>{this.state.name}</Text>
       <Text style={styles.inputText}>${this.state.price}</Text>
       <Text style={styles.inputText}>{this.state.description}</Text>
+      <TouchableOpacity style={styles.buttons} onPress={this.addCart}>
+        <Text style={{color:'#000000'}}>Purchase Glasses</Text>
+    </TouchableOpacity>
      </View>
       );
   }
@@ -89,5 +96,14 @@ const styles = StyleSheet.create({
     color:"#fff",
     padding:10,
     fontSize:25
-  }
+  },
+  buttons:{
+    width:120,
+    backgroundColor:"#dbd3a7",
+    borderRadius:25,
+    height:30,
+    alignItems:"center",
+    justifyContent:"center",
+    padding:7
+  },
 });

@@ -23,7 +23,7 @@ export default class Home extends Component{
   this.props.navigation.navigate('createItems')
 }
  clickCheck=() => {
-  this.props.navigation.navigate('createItems')
+  this.props.navigation.navigate('checkOrders',{name:this.state.name,userName:this.state.user})
 }
  viewItems =()=>{
   this.props.navigation.navigate('viewItems',{name:this.state.name,userName:this.state.user} )

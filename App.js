@@ -23,7 +23,6 @@ const Auth = () => {
         component={Signup}
         options={{
           title: 'Signup',
-          headerLeft:null, //Set Header Title
           headerStyle: {
             backgroundColor: '#307ecc', //Set Header color
           },

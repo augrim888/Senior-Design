@@ -72,7 +72,7 @@ class Login extends Component{
         }
 
       } else {
-        this.setState({errortext:'Login failed.Please check your user name id or password'});
+        this.setState({errortext:'Login failed. Check your user id/password'});
         console.log('Please check your user name id or password');
       }
     })
@@ -90,7 +90,6 @@ class Login extends Component{
   return(
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
-     <Text style={styles.logo}>Optic Origin</Text>
      <Text style={styles.errorStyle}>{this.state.errortext}</Text>
      <View style={styles.inputView} >
        <TextInput

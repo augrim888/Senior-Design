@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import logo from '../assets/opticx.png'
-import { useState } from 'react';
 import { Component } from 'react';
 
 

@@ -84,11 +84,13 @@ app.post('/register', function (req, res){
   let user = req.body.userName;
   let password = req.body.password;
   let email = req.body.email;
-  let address = req.body.address;
+  let street = req.body.street;
+  let city = req.body.city;
+  let state = req.body.states;
+  let zipcode =req.body.zipcode;
   let phone = req.body.phone;
   let name = req.body.name;
   // Executing the MySQL query (select all data from the 'users' table).
-  console.log(address)
   connection.query('SELECT * FROM user_info WHERE user = "' + user + '"', function (error, results, fields) {
     //console.log('SELECT * FROM user_info WHERE user = "' + req.body.user + '"')
     // If some error occurs, we throw an error.
@@ -222,60 +224,59 @@ app.post('/additem', function (req, res){
   let price = req.body.price
   let user = req.body.user
 
-  connection.query('INSERT INTO items (itemname,description,imageurl,price,authorized_user) VALUES (\"' + itemname +'\",\"' + description +'\", \"' + imageurl +'\",\"' + price + '\",\"' + user + '\")', function (error, results, fields){
+  connection.query('INSERT INTO items (itemname,description,imageurl,price,authorized_user,circulation) VALUES (\"' + itemname +'\",\"' + description +'\", \"' + imageurl +'\",\"' + price + '\",\"' + user + '\",\"' + 'true' + '\")', function (error, results, fields){
     if (error) throw error;
     else res.json({status:"ITEM ADDED SUCCESSFULLY"})
   })
 });
 });
 
-app.get('/vieworders', function (req, res){
+app.post('/vieworders', function (req, res){
   connection.getConnection(function (err, connection) {
     if(err) {
       console.log(err)
       return
     }
 
-  let user = req.body.user
-
-  connection.query('SELECT usertype FROM user_info WHERE user = \"' + req.body.userName + "\"", function (error,userresult, fields){
+  let user = req.body.userName
+  
+  connection.query('SELECT role,clinicname FROM user_info WHERE user = \"' + req.body.userName + "\"", function (error,userresult, fields){
     // Executing the MySQL query (select all data from the 'users' table).
     if (error) throw error;
     
-    if(userresult[0].usertype == "vendor")
+    if(userresult[0].role == "vendor")
     {
       let orderscope = req.body.orderscope
-      if(orderscope == "all")
+      if(orderscope != "unfulfilled")
       {
-        connection.query('SELECT orderID, buyer, email, status,itemID,tracking FROM orders INNER JOIN user_info ON orders.buyer = user_info.user WHERE vendor = "' + req.body.userName + '\"', function (error,results,fields){
+        connection.query('SELECT orderID, buyer, status,items.itemID,tracking, itemname, imageurl, price FROM orders INNER JOIN items ON orders.itemID = items.itemID WHERE clinic = "' + userresult[0].clinicname + '\"', function (error,results,fields){
         if (error) throw error;
-        else res.json(results)
-        
+        else res.json({reply:results}) 
         })
       }
-      else if(orderscope == "unfulfilled")
+      else
       {
-        connection.query('SELECT orderID, buyer, email, status,itemID,tracking FROM orders INNER JOIN user_info ON orders.buyer = user_info.user WHERE vendor = "' + req.body.userName + '\" AND status != "fulfilled"', function (error,results,fields){
+        connection.query('SELECT orderID, buyer, status,items.itemID,tracking, itemname, imageurl, price FROM orders INNER JOIN items ON orders.itemID = items.itemID WHERE clinic = "' + userresult[0].clinicname + '\" AND status != "fulfilled"', function (error,results,fields){
+          console.log(results);
           if (error) throw error;
-          else res.json(results)
-          
+          else res.json({reply:results})          
           })
       }
     }
     else
     {
-      connection.query('SELECT orderID, clinicname, status,itemID,tracking FROM orders INNER JOIN user_info ON orders.vendor = user_info.user WHERE buyer = "' + req.body.userName + '\"', function (error,results,fields){
+      connection.query('SELECT orderID, clinic, status,items.itemID,tracking, itemname, imageurl, price FROM orders INNER JOIN items ON orders.itemID = items.itemID  WHERE buyer = "' + user + '\"', function (error,results,fields){
+        console.log(results);
         if (error) throw error;
-        else res.json(results)
-        
+        else res.json({reply:results})        
         })
     }
   })
 });
-});
+}); 
 
 
-app.post('/vieworders', function (req, res){
+app.post('/modifyorders', function (req, res){
   connection.getConnection(function (err, connection) {
     if(err) {
       console.log(err)
@@ -286,7 +287,7 @@ app.post('/vieworders', function (req, res){
 
   if(method == "delete")
   {
-    connection.query('Update FROM orders WHERE orderID = ' + orderid, function (error, results, fields){
+    connection.query('UPDATE orders SET status = \"' + 'Canceled' + ' WHERE orderID = ' + orderid, function(error, results, fields){
       if (error) throw error;
       else res.send("ORDER DELETED SUCCESSFULLY")
     })
@@ -294,9 +295,8 @@ app.post('/vieworders', function (req, res){
   else if(method == "edit")
   {
     let status = req.body.status
-    let itemid = req.body.itemid
     let tracking = req.body.tracking
-    connection.query('UPDATE orders SET status = \"' + status + '\", itemid = \"' + itemid+ '\", tracking = ' + tracking + ' WHERE orderID = ' + orderid, function(error, results, fields){
+    connection.query('UPDATE orders SET status = \"' + status + '\", tracking = ' + tracking + ' WHERE orderID = ' + orderid, function(error, results, fields){
 
     if (error) throw error;
     else res.send("ORDER SUCCESSFULLY UPDATED")
@@ -306,7 +306,6 @@ app.post('/vieworders', function (req, res){
   
 })
 });
-
 app.post('/addorder', function (req, res){
   connection.getConnection(function (err, connection) {
         if(err) {
@@ -315,11 +314,11 @@ app.post('/addorder', function (req, res){
     }
   let itemID = req.body.itemid
   let buyer = req.body.userName
-  
-  connection.query("SELECT addedby FROM items WHERE itemID = " + itemID, function(error, vendorresults, fields){
+  connection.query("SELECT clinicname from user_info where user = ")
+  connection.query("SELECT authorized_user FROM items WHERE itemID = " + itemID, function(error, vendorresults, fields){
     if (error) throw error;
     console.log(vendorresults)
-    let vendor = vendorresults[0].addedby
+    let vendor = vendorresults[0].authorized_user
     connection.query('INSERT INTO orders (vendor,buyer,status,itemID,tracking) VALUES (\"' + vendor +'\",\"' + buyer +'\",\"new\",\"' + itemID + '\",\"None\")', function (error, results, fields){
       if (error) throw error;
       else res.send("ORDER CREATED SUCCESSFULLY")

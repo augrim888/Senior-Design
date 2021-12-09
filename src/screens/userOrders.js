@@ -1,18 +1,10 @@
-import React,{useEffect, useState} from 'react';
+import React from 'react';
 import { StyleSheet,ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import clipboard from '../assets/clipboard.png'
-import order from '../assets/package.png'
-import {
-  NavigationScreenProps,
-  NavigationScreenComponent
-} from 'react-navigation'
-import { DefaultNavigatorOptions } from '@react-navigation/native';
 import { Component } from 'react';
-import { Button } from 'react-native';
   
 
-export default class publicHome extends Component{
+export default class userOrders extends Component{
   constructor(props) {
     super(props)
     this.state = {
@@ -20,58 +12,49 @@ export default class publicHome extends Component{
         user:this.props.route.params.userName,
         resJSON:null
     }
-      //props.things.forEach(thing => {
-      //this[`${thing}_ref`] = React.createRef()
-     //});
-    this.props.navigation.setOptions({title:'Welcome '+ this.state.name})
-    this.props.navigation.setOptions({headerRight: () => (  <TouchableOpacity style={{
-      flexDirection: 'row',
-      backgroundColor: '#485a96',
-      alignItems: 'center',
-      borderWidth: 2,
-      borderColor: '#a5b0a6',
-      height: 40,
-      width:120,
-      borderRadius: 5,
-      margin: 5,
-      alignSelf:"left",
-      textAlign:'center'
-    }} onPress ={()=>this.checkorder()} ><Text stylele ={Styles.buttonTextStyle}>  Check Orders</Text></TouchableOpacity>)})
+    this.props.navigation.setOptions({title:'Current orders'})
+    //this.props.navigation.setOptions({headerLeft:()=>null})
 }
 
-gotoItems=(name,price,description,URL)=>{
-  this.props.navigation.navigate('itemInfo',{itemName:name,itemPrice:price,itemDescription:description,imageurl:URL})
+gotoItems=(id,name,status,tracking,URL)=>{
+  this.props.navigation.navigate('OrderPage',{orderID:id,buyerName:name,orderStatus:status,orderTracking:tracking,imageurl:URL})
 }
 
   getResponse = async () => {
-    const response=await fetch('http://localhost:3307/userhome', {
-      method: 'GET',
+    const response=await fetch('http://localhost:3307/vieworders', {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-      }});
+      } ,
+      body: JSON.stringify({
+        userName: this.state.user,
+      })});
     const glass = await response.json();
     return glass;
-  } 
- checkorder =() =>{
-   this.props.navigation.navigate('userOrders',{userName:this.state.user})
- }
+  }
+
 render(){
   if(this.state.resJSON!=null&&this.state.resJSON!="undefined"){
     const list = this.state.resJSON
     console.log(list)
   return( 
   <View style={Styles.container}>
-  <View><ul style ={{listStyleType:'none'}}>{
+  <View><ul style = {{listStyleType:'none'}}>{
   list.map((obj) => { 
   return (
-  <li key={obj.itemname} >
-  <TouchableOpacity style={Styles.buttonStyle} key={obj.itemname}  onPress={() => this.gotoItems(obj.itemname,obj.price,obj.description,obj.imageurl)} >
+  <li key={obj.orderID} >
+  <TouchableOpacity style={Styles.buttonStyle} key={obj.orderID}  onPress={() => this.gotoItems(obj.orderID,obj.buyer,obj.status,obj.tracking,obj.imageurl)} >
   <TouchableHighlight style= {Styles.buttonClick} />
-  <Image source = {obj.imageurl} style = {Styles.buttonImageStyle} position ={'relative'}/>
+  <Text style={Styles.buttonTextStyle}> {obj.orderID}.  </Text>
+  <Image source={obj.imageurl} style={Styles.buttonImageStyle} /> 
   <View style={Styles.buttonSeperatorStyle} />
   <Text style={Styles.buttonTextStyle}> {obj.itemname}</Text>
   <Text style={Styles.buttonTextStyle}> ${obj.price} </Text>
+  <View style={Styles.buttonSeperatorStyle} />
+  <Text style={Styles.buttonTextStyle}> {obj.buyer}</Text>
+  <Text style={Styles.buttonTextStyle}> {obj.status} </Text>
+  <Text style={Styles.buttonTextStyle}> Tracking No - {obj.tracking}</Text>
   </TouchableOpacity>
   </li>
   )
@@ -124,26 +107,25 @@ lens:{
     borderWidth: 2,
     borderColor: '#a5b0a6',
     height: 90,
-    width:250,
+    width:480,
     borderRadius: 5,
     margin: 5,
     alignSelf:"center",
-    
   },
   buttonClick: {
     backgroundColor: '#07a809',
   },
   buttonImageStyle: {
-    margin: 5,
-    height: 80,
-    width: 80,
+    margin: 3,
+    height: 40,
+    width: 40,
     resizeMode:'contain'
   },
   buttonTextStyle: {
     color: '#fff',
     marginBottom: 4,
     marginLeft: 10,
-    padding:5
+    padding:2
   },
   buttonSeperatorStyle: {
     backgroundColor: '#a5b0a6',

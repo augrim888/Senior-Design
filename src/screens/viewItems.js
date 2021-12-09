@@ -1,13 +1,6 @@
-import React,{useEffect, useState} from 'react';
+import React from 'react';
 import { StyleSheet,ScrollView, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import clipboard from '../assets/clipboard.png'
-import order from '../assets/package.png'
-import {
-  NavigationScreenProps,
-  NavigationScreenComponent
-} from 'react-navigation'
-import { DefaultNavigatorOptions } from '@react-navigation/native';
 import { Component } from 'react';
   
 

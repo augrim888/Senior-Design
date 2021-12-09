@@ -166,7 +166,7 @@ export default class Signup extends Component{
       password: this.state.password,
       email:this.state.email,
       phone:this.state.phone,
-      address:this.state.street,
+      street:this.state.street,
       city:this.state.city,
       states: this.state.states,
       zipcode:this.state.zipcode
@@ -213,7 +213,6 @@ export default class Signup extends Component{
 
     <View style={styles.container}>
       <Image source={logo} style={styles.logostyle} /> 
-     <Text style={styles.logo}>Opticx</Text>
      <View style ={styles.errorStyle}><Text style={{color:'red'}}>{this.state.errortext}</Text></View>
      <View style={styles.inputView} >
        <TextInput
